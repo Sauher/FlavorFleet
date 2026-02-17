@@ -19,7 +19,7 @@ router.get("/:id",authenticate, async (req, res) => {
     if (user) {
         res.json(user);
     } else {
-        res.status(404).json({ message: "User not found" });
+        res.status(404).json({ message: "Nem található felhasználó!" });
     }
 });
 
@@ -47,10 +47,10 @@ router.post("/login", async (req, res) => {
         const { email, password } = req.body;
         const user = await User.scope("withPassword").findOne({ where: { email } });
         if (!user) {
-            return res.status(401).json({ message: "No user found" });
+            return res.status(401).json({ message: "Nem található felhasználó ilyen felhasználó!" });
         }
         if(!user.status) {
-            return res.status(403).json({ message: "User is inactive" });
+            return res.status(403).json({ message: "Felhasználó felfüggesztve!" });
         }
         if (user && await bcrypt.compare(password, user.password)) {
             await user.update({ lastLogin: new Date() });
@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
             const token = generateToken(user);
             res.status(200).json({ token, id: user.id });
         } else {
-            res.status(401).json({ message: "Invalid email or password" });
+            res.status(401).json({ message: "Helytelen email vagy jelszó!" });
         }
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -70,12 +70,12 @@ router.post("/registration", async (req, res) => {
     const { name, email, password} = req.body;
 
     if (await User.findOne({ where: { email } })) {
-        return res.status(400).json({ message: "Email already in use" });
+        return res.status(400).json({ message: "Ez az email cím már használatban van!" });
     }
     const user =  await User.create({ name, email, password});
-    res.status(201).json({ user ,message: "User registered successfully" });
+    res.status(201).json({ user ,message: "Sikeres regisztráció!" });
     } catch(e){
-        res.status(500).json({ message: 'Registration failed', error: e.message });
+        res.status(500).json({ message: 'Sikertelen regisztráció!', error: e.message });
     }
     
 });
@@ -84,7 +84,7 @@ router.patch("/:id",authenticate, async (req, res) => {
 const id = req.params.id;
 const user = await User.findByPk(id);
 if (!user){
-    return  res.status(404).json({ message: "User not found" });
+    return  res.status(404).json({ message: "Nem található felhasználó!" });
 }
 const updateduser = await user.update(req.body);
 res.status(200).json(updateduser);
@@ -95,10 +95,10 @@ router.delete("/:id",authenticate, async (req, res) => {
     const id = req.params.id;
     const user = await User.findByPk(id);
     if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: "Nem található felhasználó!" });
     }
     await user.destroy();
-    res.status(200).json({ message: "User deleted successfully" });
+    res.status(200).json({ message: "Felhasználó sikeresen törölve!" });
 });
 
 module.exports = router;
