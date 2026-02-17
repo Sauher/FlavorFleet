@@ -1,0 +1,11 @@
+## send email
+
+POST http://localhost:3000/mail/send
+Content-Type: application/json
+
+{
+    "to":"schaueroliver@turr.hu",
+    "subject":"Worktime",
+    "html": "Hello"
+
+}
