@@ -1,0 +1,7 @@
+<div *ngIf="message" class="message-container">
+  <p-message 
+    [severity]="message.severity" 
+    [text]="message.title + ' - ' + message.message"
+    [styleClass]="'w-full'" closable>
+  </p-message>
+</div>
