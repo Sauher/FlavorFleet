@@ -1,0 +1,114 @@
+<div class="register-page">
+  <div class="register-card">
+    <!-- Left: illustration / branding -->
+    <div class="register-brand">
+      <img src="Logo.png" alt="FlavorFleet" class="brand-logo" />
+      <h2>FlavorFleet</h2>
+      <p>Csatlakozz hozzánk és fedezd fel a legjobb éttermeket a környékeden!</p>
+    </div>
+
+    <!-- Right: form -->
+    <div class="register-form-side">
+      <h1>Regisztráció</h1>
+      <p class="subtitle">Hozd létre fiókodat néhány lépésben.</p>
+
+      <form (ngSubmit)="onRegister()">
+        <!-- Name -->
+        <div class="field">
+          <label for="name">Teljes név &nbsp;<i class="pi pi-user"></i></label>
+          <span class="p-input-icon-left w-full">
+            <input
+              id="name"
+              pInputText
+              type="text"
+              class="w-full"
+              placeholder="Kovács János"
+              [(ngModel)]="name"
+              name="name"
+              required
+            />
+          </span>
+        </div>
+
+        <!-- Email -->
+        <div class="field">
+          <label for="email">E-mail cím &nbsp;<i class="pi pi-envelope"></i></label>
+          <span class="p-input-icon-left w-full">
+            <input
+              id="email"
+              pInputText
+              type="email"
+              class="w-full"
+              placeholder="pelda@email.com"
+              [(ngModel)]="email"
+              name="email"
+              required
+            />
+          </span>
+        </div>
+
+        <!-- Password -->
+        <div class="field">
+          <label for="password">Jelszó &nbsp;<i class="pi pi-lock"></i></label>
+          <p-password
+            id="password"
+            [(ngModel)]="password"
+            name="password"
+            [toggleMask]="true"
+            [feedback]="true"
+            placeholder="Jelszó"
+            styleClass="w-full"
+            inputStyleClass="w-full"
+            promptLabel="Adj meg egy jelszót"
+            weakLabel="Gyenge"
+            mediumLabel="Közepes"
+            strongLabel="Erős"
+          ></p-password>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="field">
+          <label for="confirmPassword">Jelszó megerősítése &nbsp;<i class="pi pi-lock"></i></label>
+          <p-password
+            id="confirmPassword"
+            [(ngModel)]="confirmPassword"
+            name="confirmPassword"
+            [toggleMask]="true"
+            [feedback]="false"
+            placeholder="Jelszó újra"
+            styleClass="w-full"
+            inputStyleClass="w-full"
+          ></p-password>
+        </div>
+
+        <!-- Terms -->
+        <div class="terms-row">
+          <p-checkbox
+            [(ngModel)]="acceptTerms"
+            name="acceptTerms"
+            [binary]="true"
+            inputId="terms"
+          ></p-checkbox>
+          <label for="terms">
+            Elfogadom az <a href="#" class="terms-link">Általános Szerződési Feltételeket</a>
+          </label>
+        </div>
+
+        <!-- Submit -->
+        <p-button
+          type="submit"
+          label="Regisztráció"
+          icon="pi pi-user-plus"
+          styleClass="w-full ff-gradient-primary"
+          [loading]="loading"
+        ></p-button>
+      </form>
+
+      <!-- Login link -->
+      <p class="login-text">
+        Már van fiókod?
+        <a routerLink="/login" class="login-link">Jelentkezz be!</a>
+      </p>
+    </div>
+  </div>
+</div>
