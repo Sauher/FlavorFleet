@@ -51,6 +51,7 @@ interface OrderItem {
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
+  isLoggedIn: boolean = true; // TODO: auth-ból
   query = '';
   selectedCategory: Category | 'All' = 'All';
 
