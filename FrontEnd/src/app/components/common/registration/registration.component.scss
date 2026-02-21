@@ -1,0 +1,170 @@
+.register-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 160px);
+  padding: 32px 16px;
+}
+
+.register-card {
+  display: flex;
+  max-width: 900px;
+  width: 100%;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(105, 68, 143, 0.12);
+  background: var(--p-surface-card);
+}
+
+.register-brand {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 36px;
+  background: linear-gradient(135deg, #916FBC 0%, #A681C4 50%, #B28AD6 100%);
+  color: #fff;
+  text-align: center;
+
+  .brand-logo {
+    height: 80px;
+    margin-bottom: 20px;
+    filter: brightness(0) invert(1);
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 12px;
+  }
+
+  p {
+    font-size: 0.95rem;
+    opacity: 0.88;
+    line-height: 1.6;
+    max-width: 260px;
+  }
+}
+
+.register-form-side {
+  flex: 1;
+  padding: 40px 40px;
+
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--p-text-color);
+    margin: 0 0 6px;
+  }
+
+  .subtitle {
+    color: var(--p-text-muted-color);
+    font-size: 0.93rem;
+    margin-bottom: 24px;
+  }
+}
+
+.field {
+  margin-bottom: 18px;
+
+  label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--p-text-color);
+    margin-bottom: 6px;
+  }
+}
+
+.terms-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 22px;
+
+  label {
+    font-size: 0.88rem;
+    color: var(--p-text-muted-color);
+    cursor: pointer;
+  }
+}
+
+.terms-link {
+  color: var(--p-primary-500);
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+::ng-deep .ff-gradient-primary {
+  background: linear-gradient(90deg, #916FBC 0%, #A681C4 100%) !important;
+  border: none !important;
+  border-radius: 14px !important;
+  color: white !important;
+  font-weight: 800 !important;
+  box-shadow: 0 10px 24px rgba(120, 70, 220, 0.18) !important;
+  transition: transform 200ms ease, box-shadow 200ms ease !important;
+
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 14px 30px rgba(120, 70, 220, 0.28) !important;
+  }
+}
+
+.login-text {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--p-text-muted-color);
+  margin-top: 8px;
+}
+
+.login-link {
+  color: var(--p-primary-500);
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+:host ::ng-deep .register-card {
+  animation: cardIn 1s ease both;
+}
+
+@media (max-width: 768px) {
+  .register-card {
+    flex-direction: column;
+  }
+
+  .register-brand {
+    padding: 32px 24px;
+
+    .brand-logo {
+      height: 56px;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+    }
+  }
+
+  .register-form-side {
+    padding: 32px 24px;
+  }
+}
