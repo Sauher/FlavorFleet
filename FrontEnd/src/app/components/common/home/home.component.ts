@@ -56,7 +56,7 @@ export class HomeComponent {
   selectedCategory: Category | 'All' = 'All';
 
   categories = [
-  { label: 'Pizza', value: 'Pizza', icon: 'pi pi-fw pi-bolt' },   // ha nincs food icon
+  { label: 'Pizza', value: 'Pizza', icon: 'pi pi-fw pi-bolt' },   
   { label: 'Burger', value: 'Burger', icon: 'pi pi-fw pi-star' },
   { label: 'Sushi', value: 'Sushi', icon: 'pi pi-fw pi-heart' },
 ];
@@ -70,7 +70,7 @@ export class HomeComponent {
       rating: 4.5,
       etaMin: 20,
       imageUrl:
-        'https://images.unsplash.com/photo-1548365328-8b849e6f52b8?auto=format&fit=crop&w=1200&q=60',
+        "https://www.google.com/search?sca_esv=bbb1899a236f26c2&sxsrf=ANbL-n4A7ts8MnsyDy16jBVYZm90ZhiHKA:1771692734106&udm=2&fbs=ADc_l-akmJ9clyHhwEynr9YRwEo_tYQUWp-_aNxOcHgKpLE-YUy1rF_kA3bn_mrSgXcgNhmuJ_hrB0X8wVkjBN1zt9F_hie2pcFxluQfXPCxcgtVVoHxGRs9ilE5qOh61dyxPQm3jzLbRzVXtSyV3YoGEZLSrP08hklX_PtI1f27El6F-XPGw_ix-NTUWfMjYlo3rC0eV5ZKjgU5r_Ze3u_Oqed6XQWVBg&q=pizza+palazzo&sa=X&ved=2ahUKEwjl1cTgheuSAxVSU1UIHX90EikQtKgLegQIDhAB&biw=1745&bih=866&dpr=1.1#sv=CAMSVhoyKhBlLUNpS1lhVlFlRnpEUVpNMg5DaUtZYVZRZUZ6RFFaTToOM0ExSUhqSVdPMWFjVU0gBCocCgZtb3NhaWMSEGUtQ2lLWWFWUWVGekRRWk0YADABGAcgnbKonQ8wAkoIEAIYAiACKAI"
     },
     {
       id: 2,
