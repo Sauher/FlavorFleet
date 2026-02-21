@@ -61,8 +61,7 @@ constructor(
   }
 
   buildMenuItems() {
-    const menuItems: MenuItem[] = [
-    ];
+    const menuItems: MenuItem[] = [];
 
     // Logged out items
     if (!this.isLoggedIn) {
@@ -118,6 +117,37 @@ constructor(
       }
     }
 
+    // Mobile-only auth items (visible in hamburger menu)
+    menuItems.push({ separator: true, styleClass: 'mobile-only-separator' });
+    if (!this.isLoggedIn) {
+      menuItems.push(
+        {
+          label: 'Bejelentkezés',
+          url: '/login',
+          styleClass: 'mobile-only-item'
+        },
+        {
+          label: 'Regisztráció',
+          url: '/register',
+          styleClass: 'mobile-only-item'
+        }
+      );
+    } else {
+      menuItems.push(
+        {
+          label: 'Kijelentkezés',
+          styleClass: 'mobile-only-item',
+          command: () => this.onLogout()
+        }
+      );
+    }
+
     this.items = menuItems;
+  }
+
+  onLogout() {
+    this.auth.logout();
+    this.msg.show('success', 'Siker', 'Sikeres kijelentkezés!');
+    this.router.navigate(['/']);
   }
 }

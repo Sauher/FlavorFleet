@@ -110,8 +110,29 @@
 ::ng-deep .ff-gradient-primary {
   background: linear-gradient(90deg, #916FBC 0%, #A681C4 100%) !important;
   border: none !important;
+  border-radius: 14px !important;
   color: white !important;
-  font-weight: 600 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 10px 24px rgba(120, 70, 220, 0.18) !important;
+  transition: transform 200ms ease, box-shadow 200ms ease !important;
+
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 14px 30px rgba(120, 70, 220, 0.28) !important;
+  }
+}
+
+::ng-deep .login-form-side .p-button-outlined {
+  border-radius: 14px !important;
+  font-weight: 800 !important;
+  border: 1px solid rgba(120, 90, 220, 0.18) !important;
+  box-shadow: 0 10px 22px rgba(35, 20, 80, 0.10) !important;
+  transition: transform 200ms ease, box-shadow 200ms ease !important;
+
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 14px 28px rgba(35, 20, 80, 0.18) !important;
+  }
 }
 
 .register-text {
