@@ -1,6 +1,6 @@
 <div class="page">
  
-  <section class="hero hero-food">
+  <section class="hero hero-food section-join section-join--top">
   <div class="hero-inner">
     <div class="hero-pill">
       <i class="pi pi-bolt"></i>
@@ -14,7 +14,7 @@
 
     <div class="search-row">
       <span class="p-input-icon-left w-full">
-        <i class="pi pi-search"></i>
+        
         <input
           pInputText
           class="w-full hero-input"
@@ -27,32 +27,35 @@
       <button pButton label="Keresés" icon="pi pi-search" class="search-btn"></button>
     </div>
 
-    <div class="category-row">
-      <button
-        *ngFor="let c of categories"
-        pButton
-        type="button"
-        [label]="c.label"
-        class="cat-btn"
-        [outlined]="selectedCategory !== c.value"
-        
-      ></button>
-    </div>
+    <div class="category-row category-row--chips">
+  <button
+    *ngFor="let c of categories"
+    pButton
+    type="button"
+    [label]="c.label"
+    [icon]="c.icon"
+    class="chip-btn"
+    [class.is-active]="selectedCategory === c.value"
+    
+  ></button>
+</div>
   </div>
 </section>
 
-  <!-- NÉPSZERŰ ÉTTERMEK -->
-  <section class="section">
-    <div class="section-title">Népszerű éttermek</div>
 
-    <div class="grid">
-      <div class="col-12 md:col-4" *ngFor="let r of filteredRestaurants">
-        <p-card styleClass="restaurant-card">
-          <ng-template pTemplate="header">
-            <div class="img-wrap">
-              <img [src]="r.imageUrl" [alt]="r.name" />
-            </div>
-          </ng-template>
+  <section class="section section-popular section-join section-join--mid">
+  <div class="popular-strip">
+    <div class="popular-inner">
+      <div class="section-title popular-title">Népszerű éttermek</div>
+
+     <div class="grid popular-grid popular-grid--center">
+  <div class="col-12 md:col-4" *ngFor="let r of filteredRestaurants">
+    <p-card styleClass="restaurant-card restaurant-card--hover">
+      <ng-template pTemplate="header">
+        <div class="img-wrap img-wrap--round">
+          <img [src]="r.imageUrl" [alt]="r.name" />
+        </div>
+      </ng-template>
 
           <div class="card-body">
             <div class="name-row">
@@ -70,44 +73,38 @@
 
             <div class="actions">
               <button pButton icon="pi pi-bookmark" label="Kiemelés" class="p-button-outlined p-button-sm"></button>
-              <button pButton icon="pi pi-shopping-bag" label="Rendelés" class="p-button-sm" (click)="orderNow(r)"></button>
+              <button pButton label="Rendelés"  class="order-btn" (click)="orderNow(r)"></button>
             </div>
           </div>
-        </p-card>
+          </p-card>
+  </div>
+</div>
+  </div>
+</div>
+</section>
+
+
+ <section class="section status-section section-join section-join--bottom">
+  <div class="status-wrap status-bg">
+    <div class="status-top">
+      <p-steps [model]="steps" [activeIndex]="activeStepIndex"></p-steps>
+    </div>
+
+    <div class="status-content one-col">
+      <div class="status-text">
+        <div class="big">Rendelésed úton van!</div>
+        <div class="small">Érkezés várható: <b>{{ currentOrderEta }} perc</b></div>
+
+        <button pButton label="Rendelés követése" icon="pi pi-map-marker" class="track-btn"></button>
       </div>
     </div>
-  </section>
-
-  <!-- ÁLLAPOT / ÚTON -->
-  <section class="section status-section">
-    <div class="status-wrap">
-      <div class="status-top">
-        <p-steps [model]="steps" [activeIndex]="activeStepIndex"></p-steps>
-      </div>
-
-      <div class="status-content">
-        <div class="status-text">
-          <div class="big">Rendelésed úton van!</div>
-          <div class="small">Érkezés várható: <b>{{ currentOrderEta }} perc</b></div>
-
-          <button pButton label="Rendelés követése" icon="pi pi-map-marker" class="track-btn"></button>
-        </div>
-
-     
-        <div class="status-illus">
-          <div class="illus-card">
-            <i class="pi pi-truck" style="font-size: 3rem"></i>
-            <div class="illus-label">Úton</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  </div>
+</section>
 
 
   <section class="section">
     <div class="grid">
-      <!-- RENDELÉSEIM -->
+     
       <div class="col-12 lg:col-6">
         <p-card styleClass="panel-card" header="Rendeléseim">
           <div class="order-list">
@@ -138,7 +135,7 @@
         </p-card>
       </div>
 
-      <!-- PROFILOM -->
+ 
       <div class="col-12 lg:col-6">
         <p-card styleClass="panel-card" header="Profilom">
           <div class="profile-head">
