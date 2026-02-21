@@ -80,4 +80,13 @@ export class AuthService {
     }
     return false;
   }
+  async isOwner(): Promise<boolean> {
+    const user : any = await this.api.readById('users', this.loggedUser().id,true).toPromise();
+    if (user) {
+     if(user.role === 'owner'){
+      return true;
+     }
+    }
+    return false;
+  }
 }

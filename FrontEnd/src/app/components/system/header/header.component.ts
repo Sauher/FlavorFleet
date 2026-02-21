@@ -7,6 +7,11 @@ import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { ApiService } from '../../../services/api.service';
+import { AuthService } from '../../../services/auth.service';
+import { MessageService } from '../../../services/message.service';
 
 @Component({
   selector: 'app-header',
@@ -16,41 +21,103 @@ import { Ripple } from 'primeng/ripple';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit{
-  isLoggedIn: boolean = false;
   @Input() title: string = '';
-items: MenuItem[] | undefined;
+constructor(
+    private auth: AuthService,
+    private msg: MessageService,
+    private router: Router,
+    private api: ApiService
+  ) { }
+  items: MenuItem[] = [];
+  isLoggedIn: boolean = true;
+  isOwner: boolean = false;
+  isAdmin: boolean = false;
+  private subscription: Subscription | null = null;
 
-    ngOnInit() {
-        this.items = [
-            {
-                label: 'Home',
-                icon: 'pi pi-home',
-            },
-            {
-                label: 'Projects',
-                icon: 'pi pi-search',
-                badge: '3',
-                items: [
-                    {
-                        label: 'Core',
-                        icon: 'pi pi-bolt',
-                        shortcut: '⌘+S',
-                    },
-                    {
-                        label: 'Blocks',
-                        icon: 'pi pi-server',
-                        shortcut: '⌘+B',
-                    },
-                    {
-                        separator: true,
-                    },
-                    {
-                        label: 'UI Kit',
-                        icon: 'pi pi-pencil',
-                        shortcut: '⌘+U',
-                    },
-                ],
-            },
-        ];
+  ngOnInit() {
+    // Initial check and build
+    this.checkAuthStatus();
+    this.buildMenuItems();
+
+    // Subscribe to login status changes
+    this.subscription = this.auth.isLoggedIn$.subscribe((loggedIn) => {
+      this.checkAuthStatus();
+      this.buildMenuItems();
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
+  }
+
+   async checkAuthStatus() {
+    this.isLoggedIn = this.auth.isLoggedUser();
+    if (this.isLoggedIn) {
+    this.isAdmin = await this.auth.isAdmin();
+    this.isOwner = await this.auth.isOwner(); 
+    }
+  }
+
+  buildMenuItems() {
+    const menuItems: MenuItem[] = [
+    ];
+
+    // Logged out items
+    if (!this.isLoggedIn) {
+      menuItems.push(
+        {
+          label: 'Éttermek',
+          url: '/restaurants'
+        }
+      );
+    }
+    if (this.isLoggedIn) {
+      menuItems.push(
+        {
+          label: 'Éttermek',
+          url: '/restaurants'
+        },
+        {
+          label: 'Rendeléseim',
+          url: '/orders'
+        },
+        {
+          label: 'Profilom',
+          url: '/profile'
+        }
+      );
+
+      if (this.isOwner) {
+        menuItems.push(
+          {
+            label: 'Kezelőpult',
+            items: [
+              {
+                label: 'Étterem kezelése',
+                url: '/restaurant-management'
+              },
+              {
+                label: 'Menü kezelése',
+                url: '/menu-management'
+              }
+            ]
+          }
+        );
+      }
+
+      // Admin only items
+      if (this.isAdmin) {
+        menuItems.push(
+          {
+            label: 'User Control Panel',
+            url: '/user-control'
+          }
+        );
+      }
+    }
+
+    this.items = menuItems;
+  }
 }
