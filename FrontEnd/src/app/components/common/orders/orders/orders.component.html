@@ -1,1 +1,175 @@
-<p>orders works!</p>
+<div class="orders-page">
+  <!-- FEJLÉC -->
+  <section class="orders-hero">
+    <div class="hero-left">
+      <div class="hero-title">Rendelések</div>
+      <div class="hero-sub">Itt látod az összes korábbi és aktuális rendelésed időrendben.</div>
+    </div>
+
+    <div class="hero-actions">
+      <span class="p-input-icon-left w-full">
+        
+        <input
+          pInputText
+          class="w-full hero-input"
+          type="text"
+          placeholder="Keresés: étterem, tétel, rendelés #..."
+          [(ngModel)]="query"
+          
+          
+        />
+        
+      </span>
+
+      <p-dropdown
+        [options]="statusOptions"
+        optionLabel="label"
+        optionValue="value"
+        [(ngModel)]="statusFilter"
+        styleClass="status-dd w-full"
+        placeholder="Státusz"
+      ></p-dropdown>
+    </div>
+  </section>
+
+  <section class="section">
+    <p-card styleClass="panel-card">
+      <div class="orders-list">
+        <div class="order-row" *ngFor="let o of filteredOrders">
+          <div class="order-main">
+            <div class="order-top">
+              <div class="order-title">
+                <span class="order-id">#{{ o.id }}</span>
+                <span class="order-restaurant">{{ o.restaurant }}</span>
+              </div>
+
+              <p-tag [value]="o.status" [severity]=" severity(o.status) "></p-tag>
+            </div>
+
+            <div class="order-meta">
+              <div class="meta-item">
+                <i class="pi pi-calendar"></i>
+                <span>{{ formatDateTime(o.createdAtIso) }}</span>
+              </div>
+
+              <div class="meta-item" *ngIf="o.etaMin && (o.status === 'Úton' || o.status === 'Folyamatban' || o.status === 'Függőben')">
+                <i class="pi pi-clock"></i>
+                <span>ETA ~ {{ o.etaMin }} perc</span>
+              </div>
+
+              <div class="meta-item">
+                <i class="pi pi-map-marker"></i>
+                <span class="meta-addr">{{ o.address }}</span>
+              </div>
+            </div>
+
+            <div class="order-preview">
+              <span class="pill" *ngFor="let l of o.lines.slice(0, 3)">
+                {{ l.qty }}× {{ l.name }}
+              </span>
+              <span class="pill pill-more" *ngIf="o.lines.length > 3">+{{ o.lines.length - 3 }} tétel</span>
+            </div>
+          </div>
+
+          <div class="order-side">
+            <div class="order-total">{{ formatFt(grandTotalFt(o)) }}</div>
+            <button pButton class="btn-details" icon="pi pi-search" label="Részletek" (click)="openDetails(o)"></button>
+          </div>
+        </div>
+
+        <div class="empty" *ngIf="filteredOrders.length === 0">
+          Nincs találat a megadott feltételekre.
+        </div>
+      </div>
+    </p-card>
+  </section>
+
+  <!-- RÉSZLETEK MODAL -->
+  <p-dialog
+    header="Rendelés részletei"
+    [(visible)]="detailsVisible"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{ width: '760px', maxWidth: '95vw' }"
+    (onHide)="closeDetails()"
+  >
+    <ng-container *ngIf="selectedOrder as o">
+      <div class="details-head">
+        <div class="dh-left">
+          <div class="dh-title">
+            <span>#{{ o.id }}</span>
+            <span class="dot">•</span>
+            <span>{{ o.restaurant }}</span>
+          </div>
+          <div class="dh-sub">{{ formatDateTime(o.createdAtIso) }}</div>
+        </div>
+
+        <p-tag [value]="o.status" [severity]=" severity(o.status) "></p-tag>
+      </div>
+
+      <p-divider></p-divider>
+
+      <div class="details-grid">
+        <div class="details-block">
+          <div class="block-title">Kiszállítás</div>
+          <div class="block-row">
+            <i class="pi pi-map-marker"></i>
+            <span>{{ o.address }}</span>
+          </div>
+          <div class="block-row" *ngIf="o.etaMin">
+            <i class="pi pi-clock"></i>
+            <span>ETA ~ {{ o.etaMin }} perc</span>
+          </div>
+        </div>
+
+        <div class="details-block">
+          <div class="block-title">Összegzés</div>
+          <div class="sum-row">
+            <span>Termékek</span>
+            <b>{{ formatFt(itemsSubtotalFt(o)) }}</b>
+          </div>
+          <div class="sum-row">
+            <span>Szállítás</span>
+            <b>{{ formatFt(o.deliveryFt) }}</b>
+          </div>
+          <div class="sum-row">
+            <span>Szerviz</span>
+            <b>{{ formatFt(o.serviceFt) }}</b>
+          </div>
+          <div class="sum-row sum-total">
+            <span>Végösszeg</span>
+            <b>{{ formatFt(grandTotalFt(o)) }}</b>
+          </div>
+        </div>
+      </div>
+
+      <p-divider></p-divider>
+
+      <div class="block-title">Tételek</div>
+
+      <p-table [value]="o.lines" styleClass="lines-table" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Tétel</th>
+            <th style="width: 90px; text-align:right;">Db</th>
+            <th style="width: 140px; text-align:right;">Egységár</th>
+            <th style="width: 160px; text-align:right;">Összesen</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-l>
+          <tr>
+            <td>{{ l.name }}</td>
+            <td style="text-align:right;">{{ l.qty }}</td>
+            <td style="text-align:right;">{{ formatFt(l.priceFt) }}</td>
+            <td style="text-align:right;"><b>{{ formatFt(lineTotalFt(l)) }}</b></td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <div class="dialog-actions">
+        <button pButton label="Bezárás" class="p-button-outlined" (click)="closeDetails()"></button>
+      </div>
+    </ng-container>
+  </p-dialog>
+</div>

@@ -1,0 +1,274 @@
+.orders-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 22px 16px 40px;
+}
+
+.orders-hero {
+  border-radius: 22px;
+  padding: 18px 16px;
+  background:
+    radial-gradient(900px 360px at 20% 20%, rgba(255, 140, 210, 0.18), transparent 55%),
+    radial-gradient(900px 360px at 80% 10%, rgba(120, 90, 220, 0.18), transparent 55%),
+    rgba(255, 255, 255, 0.78);
+  box-shadow: 0 18px 50px rgba(45, 0, 115, 0.08);
+
+  display: grid;
+  grid-template-columns: 1fr 460px;
+  gap: 14px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .orders-hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hero-title {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #231a44;
+}
+
+.hero-sub {
+  margin-top: 6px;
+  color: rgba(35, 26, 68, 0.72);
+  font-weight: 600;
+}
+
+.hero-actions {
+  display: grid;
+  gap: 10px;
+}
+.p-select{
+    height: 46px;
+    border-radius: 16px;
+}
+.hero-input {
+  height: 46px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(120, 90, 220, 0.18);
+  backdrop-filter: blur(10px);
+}
+.p-tag{
+    margin-right:auto ;
+}
+
+
+:host ::ng-deep .status-dd .p-dropdown {
+  width: 100%;
+  border-radius: 16px;
+}
+
+.section {
+  margin-top: 18px;
+}
+
+.panel-card {
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(44, 35, 80, 0.10);
+}
+
+.orders-list {
+  display: grid;
+  gap: 12px;
+}
+
+.order-row {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(245, 243, 255, 0.55);
+  border: 1px solid rgba(120, 90, 220, 0.12);
+}
+
+@media (max-width: 800px) {
+  .order-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.order-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.order-title {
+  display: inline-flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.order-id {
+  font-weight: 900;
+  color: #231a44;
+}
+
+.order-restaurant {
+  font-weight: 900;
+  color: #231a44;
+}
+
+.order-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  color: rgba(35, 26, 68, 0.75);
+  font-weight: 650;
+  margin-bottom: 10px;
+}
+
+.meta-item {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.meta-addr {
+  max-width: 520px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.order-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(120, 90, 220, 0.14);
+  color: #2c2350;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.pill-more {
+  opacity: 0.8;
+}
+
+.order-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+}
+
+.order-total {
+  font-size: 18px;
+  font-weight: 950;
+  color: #231a44;
+}
+
+.btn-details {
+  border-radius: 14px;
+  font-weight: 900;
+  box-shadow: 0 12px 26px rgba(120, 70, 220, 0.18);
+}
+
+.empty {
+  padding: 18px 8px 6px;
+  color: rgba(35, 26, 68, 0.7);
+  font-weight: 700;
+}
+
+/* Modal részletek */
+.details-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.dh-title {
+  font-weight: 950;
+  color: #231a44;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.dot {
+  opacity: 0.5;
+}
+
+.dh-sub {
+  margin-top: 4px;
+  color: rgba(35, 26, 68, 0.7);
+  font-weight: 650;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.details-block {
+  border-radius: 14px;
+  background: rgba(245, 243, 255, 0.55);
+  border: 1px solid rgba(120, 90, 220, 0.12);
+  padding: 12px;
+}
+
+.block-title {
+  font-weight: 950;
+  color: #231a44;
+  margin-bottom: 8px;
+}
+
+.block-row {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  color: rgba(35, 26, 68, 0.75);
+  font-weight: 650;
+  margin: 4px 0;
+}
+
+.sum-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: rgba(35, 26, 68, 0.78);
+  font-weight: 750;
+  margin: 6px 0;
+}
+
+.sum-total {
+  padding-top: 8px;
+  border-top: 1px solid rgba(120, 90, 220, 0.16);
+  color: #231a44;
+}
+
+:host ::ng-deep .lines-table .p-datatable-thead > tr > th {
+  font-weight: 900;
+}
+
+.dialog-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
