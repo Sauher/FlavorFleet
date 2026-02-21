@@ -2,9 +2,9 @@ import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { routes } from './app.routes';
-import Aura from '@primeng/themes/aura';
 import { providePrimeNG } from 'primeng/config';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'
+import { FlavorFleetPreset } from '../assets/themes/Flavorfleetpreset';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -12,7 +12,12 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     providePrimeNG({
-      theme: Aura
+      theme: {
+        preset: FlavorFleetPreset,
+        options: {
+          darkModeSelector: false
+        }
+      }
     }),
     provideAnimationsAsync()
   ]
