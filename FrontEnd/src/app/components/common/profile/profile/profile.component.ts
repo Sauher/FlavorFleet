@@ -7,6 +7,11 @@ import { ButtonModule } from 'primeng/button';
 import { AvatarModule } from 'primeng/avatar';
 import { RatingModule } from 'primeng/rating';
 import { DividerModule } from 'primeng/divider';
+import { MessageService } from '../../../../services/message.service';
+
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
 
 interface FavoriteItem {
   id: number;
@@ -27,11 +32,16 @@ interface FavoriteItem {
     AvatarModule,
     RatingModule,
     DividerModule,
+    DialogModule,
+    InputTextModule,
+    PasswordModule,
+
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
-export class ProfilePageComponent {
+export class ProfileComponent {
+   constructor(private msg: MessageService) {}
   user = {
     name: 'Máté Horváth',
     email: 'mate.horvath@email.com',
@@ -82,4 +92,48 @@ export class ProfilePageComponent {
   openFavorite(item: FavoriteItem) {
     console.log('Open favorite:', item.name);
   }
+ 
+
+editProfileVisible = false;
+changePasswordVisible = false;
+
+/** form modellek (modalokhoz) */
+editModel = { name: '', email: '' };
+passwordModel = { password: '', confirm: '' };
+
+openEditProfile() {
+  this.editModel = { name: this.user.name, email: this.user.email };
+  this.editProfileVisible = true;
+}
+
+saveProfile() {
+  this.user = { ...this.user, name: this.editModel.name.trim(), email: this.editModel.email.trim() };
+  this.editProfileVisible = false;
+
+  this.msg.show(  'success',  'Mentve', 'Név és email frissítve.' );
+}
+
+openChangePassword() {
+  this.passwordModel = { password: '', confirm: '' };
+  this.changePasswordVisible = true;
+}
+
+savePassword() {
+  const p = this.passwordModel.password;
+  const c = this.passwordModel.confirm;
+
+  if (!p || p.length < 6) {
+    this.msg.show('error', 'Hiba', 'A jelszó legyen legalább 6 karakter.' );
+    return;
+  }
+  if (p !== c) {
+    this.msg.show('error',  'Hiba',  'A jelszavak nem egyeznek.' );
+    return;
+  }
+
+  this.changePasswordVisible = false;
+  this.msg.show('success',  'Siker',  'Jelszó módosítva.' );
+
+  // TODO: backend hívás ide
+}
 }

@@ -1,18 +1,23 @@
 <div class="profile-page">
 
-  <section class="profile-hero">
-    <div class="profile-head">
-      <p-avatar [image]="user.avatarUrl" size="xlarge" shape="circle"></p-avatar>
+ <section class="profile-hero">
+  <div class="profile-head">
+    <p-avatar [image]="user.avatarUrl" size="xlarge" shape="circle"></p-avatar>
 
-      <div class="profile-id">
-        <div class="name">{{ user.name }}</div>
-        <div class="email">{{ user.email }}</div>
+    <div class="profile-id">
+      <div class="name">{{ user.name }}</div>
+      <div class="email">{{ user.email }}</div>
 
-        <button pButton label="Szerkeszt" class="btn-edit" (click)="editProfile()"></button>
+      <div class="profile-actions">
+        <button pButton class="p-button-link" icon="pi pi-user-edit" label="Név és email szerkesztése"
+          (click)="openEditProfile()"></button>
+
+        <button pButton class="p-button-link" icon="pi pi-lock" label="Jelszó módosítása"
+          (click)="openChangePassword()"></button>
       </div>
     </div>
-  </section>
-
+  </div>
+</section>
 
   <section class="section">
     <div class="section-title">Személyes adatok</div>
@@ -76,3 +81,66 @@
     </div>
   </section>
 </div>
+
+<p-dialog
+  header="Név és email szerkesztése"
+  [(visible)]="editProfileVisible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '420px' }"
+>
+  <div class="dialog-form">
+    <div class="field">
+      <label>Név</label>
+      <input pInputText class="w-full" [(ngModel)]="editModel.name" />
+    </div>
+
+    <div class="field">
+      <label>Email</label>
+      <input pInputText class="w-full" [(ngModel)]="editModel.email" />
+    </div>
+
+    <div class="dialog-actions">
+      <button pButton label="Mégse" class="p-button-outlined" (click)="editProfileVisible=false"></button>
+      <button pButton label="Mentés" icon="pi pi-check" (click)="saveProfile()"></button>
+    </div>
+  </div>
+</p-dialog>
+
+
+<p-dialog
+  header="Jelszó módosítása"
+  [(visible)]="changePasswordVisible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '420px' }"
+>
+  <div class="dialog-form">
+    <div class="field">
+      <label>Új jelszó</label>
+      <p-password
+        [(ngModel)]="passwordModel.password"
+        [toggleMask]="true"
+        [feedback]="false"
+        inputStyleClass="w-full"
+      ></p-password>
+    </div>
+
+    <div class="field">
+      <label>Jelszó megerősítése</label>
+      <p-password
+        [(ngModel)]="passwordModel.confirm"
+        [toggleMask]="true"
+        [feedback]="false"
+        inputStyleClass="w-full"
+      ></p-password>
+    </div>
+
+    <div class="dialog-actions">
+      <button pButton label="Mégse" class="p-button-outlined" (click)="changePasswordVisible=false"></button>
+      <button pButton label="Mentés" icon="pi pi-check" (click)="savePassword()"></button>
+    </div>
+  </div>
+</p-dialog>
