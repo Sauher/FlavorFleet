@@ -660,6 +660,9 @@
 
 :host ::ng-deep .steps-animated .p-steps:before {
   border-top: 2px solid rgba(120, 90, 220, 0.22);
+   left: 8%;
+  right: 8%;         
+  width: auto;
 }
 
 
@@ -670,11 +673,11 @@
 :host ::ng-deep .steps-animated .p-steps::after {
   content: "";
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 15%;
+  right: 15%;
   top: 16px;                 
   height: 2px;
-  background: linear-gradient(90deg, #8b5cf6, #ec4899);
+  background: linear-gradient(90deg, #490ed3, #ec4899);
   transform-origin: left center;
   transform: scaleX(0);
   animation: fillLine 900ms ease-out forwards;
@@ -690,3 +693,9 @@
 :host ::ng-deep .steps-animated .p-steps .p-steps-item.p-highlight .p-menuitem-link {
   font-weight: 800;
 }
+
+
+:host ::ng-deep .steps-animated .p-steps {
+  position: relative;
+}
+
