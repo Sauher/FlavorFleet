@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -11,6 +11,7 @@ import { StepsModule } from 'primeng/steps';
 import { TagModule } from 'primeng/tag';
 import { AvatarModule } from 'primeng/avatar';
 import { InputMaskModule } from 'primeng/inputmask';
+import { AuthService } from '../../../services/auth.service';
 
 type Category = 'Pizza' | 'Burger' | 'Sushi';
 
@@ -50,10 +51,20 @@ interface OrderItem {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent {
-  isLoggedIn: boolean = true; // TODO: auth-ból
+export class HomeComponent implements OnInit {
+  constructor(
+    private auth: AuthService,
+  ) {}
+
+  
+
+  isLoggedIn: boolean = false; // TODO: auth-ból
   query = '';
   selectedCategory: Category | 'All' = 'All';
+  
+  ngOnInit() {
+    this.checkAuthStatus();
+  }
 
   categories = [
   { label: 'Pizza', value: 'Pizza', icon: 'pi pi-fw pi-bolt' },   
@@ -167,5 +178,8 @@ export class HomeComponent {
 
   changePassword() {
     console.log('Change password clicked');
+  }
+  async checkAuthStatus() {
+    this.isLoggedIn = this.auth.isLoggedUser();
   }
 }

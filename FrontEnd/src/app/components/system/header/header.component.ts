@@ -34,14 +34,14 @@ constructor(
   isAdmin: boolean = false;
   private subscription: Subscription | null = null;
 
-  ngOnInit() {
+  async ngOnInit() {
     // Initial check and build
-    this.checkAuthStatus();
+    await this.checkAuthStatus();
     this.buildMenuItems();
 
     // Subscribe to login status changes
-    this.subscription = this.auth.isLoggedIn$.subscribe((loggedIn) => {
-      this.checkAuthStatus();
+    this.subscription = this.auth.isLoggedIn$.subscribe(async (loggedIn) => {
+      await this.checkAuthStatus();
       this.buildMenuItems();
     });
   }
