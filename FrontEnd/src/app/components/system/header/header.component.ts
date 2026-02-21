@@ -68,7 +68,7 @@ constructor(
       menuItems.push(
         {
           label: 'Éttermek',
-          url: '/restaurants'
+          routerLink: '/restaurants'
         }
       );
     }
@@ -76,15 +76,15 @@ constructor(
       menuItems.push(
         {
           label: 'Éttermek',
-          url: '/restaurants'
+          routerLink: '/restaurants'
         },
         {
           label: 'Rendeléseim',
-          url: '/orders'
+          routerLink: '/orders'
         },
         {
           label: 'Profilom',
-          url: '/profile'
+          routerLink: '/profile'
         }
       );
 
@@ -95,11 +95,11 @@ constructor(
             items: [
               {
                 label: 'Étterem kezelése',
-                url: '/restaurant-management'
+                routerLink: '/restaurant-management'
               },
               {
                 label: 'Menü kezelése',
-                url: '/menu-management'
+                routerLink: '/menu-management'
               }
             ]
           }
@@ -111,7 +111,7 @@ constructor(
         menuItems.push(
           {
             label: 'User Control Panel',
-            url: '/user-control'
+            routerLink: '/user-control'
           }
         );
       }
@@ -123,12 +123,12 @@ constructor(
       menuItems.push(
         {
           label: 'Bejelentkezés',
-          url: '/login',
+          routerLink: '/login',
           styleClass: 'mobile-only-item'
         },
         {
           label: 'Regisztráció',
-          url: '/register',
+          routerLink: '/register',
           styleClass: 'mobile-only-item'
         }
       );
