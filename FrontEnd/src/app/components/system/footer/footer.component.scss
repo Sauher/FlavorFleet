@@ -1,0 +1,135 @@
+.footer {
+  background: linear-gradient(180deg, var(--p-surface-section) 0%, #EDE5F5 100%);
+  padding: 48px 24px 0;
+  margin-top: 64px;
+  border-top: 1px solid var(--p-surface-border);
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.footer-logo {
+  height: 40px;
+}
+
+.brand-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--p-primary-700);
+}
+
+.brand-desc {
+  color: var(--p-text-muted-color);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 14px;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(145, 111, 188, 0.12);
+    color: var(--p-primary-700);
+    transition: all 250ms ease;
+
+    &:hover {
+      background: var(--p-primary-500);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.footer-section {
+  h4 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--p-text-color);
+    margin-bottom: 16px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+
+  a {
+    color: var(--p-text-muted-color);
+    text-decoration: none;
+    font-size: 0.93rem;
+    transition: color 200ms ease;
+
+    &:hover {
+      color: var(--p-primary-500);
+    }
+  }
+}
+
+.contact-list {
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--p-text-muted-color);
+    font-size: 0.93rem;
+
+    i {
+      color: var(--p-primary-500);
+      font-size: 0.9rem;
+    }
+  }
+}
+
+
+.footer-bottom {
+  text-align: center;
+  padding: 18px 0 24px;
+  color: var(--p-text-muted-color);
+  font-size: 0.88rem;
+}
+
+
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    text-align: center;
+  }
+
+  .brand-row {
+    justify-content: center;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+
+  .contact-list li {
+    justify-content: center;
+  }
+}

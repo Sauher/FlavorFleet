@@ -1,1 +1,57 @@
-<p>footer works!</p>
+<footer class="footer">
+  <div class="footer-content">
+    <!-- Brand -->
+    <div class="footer-section brand">
+      <div class="brand-row">
+        <img src="Logo.png" alt="FlavorFleet logo" class="footer-logo" />
+        <span class="brand-name">FlavorFleet</span>
+      </div>
+      <p class="brand-desc">
+        Friss ételek, gyors kiszállítás – közvetlenül a kedvenc éttermeidből.
+      </p>
+      <div class="social-icons">
+        <a href="#" aria-label="Facebook"><i class="pi pi-facebook"></i></a>
+        <a href="#" aria-label="Instagram"><i class="pi pi-instagram"></i></a>
+        <a href="#" aria-label="Twitter"><i class="pi pi-twitter"></i></a>
+      </div>
+    </div>
+
+    <!-- Navigáció -->
+    <div class="footer-section">
+      <h4>Navigáció</h4>
+      <ul>
+        <li><a routerLink="/">Főoldal</a></li>
+        <li><a routerLink="/restaurants">Éttermek</a></li>
+        <li><a routerLink="/about">Rólunk</a></li>
+        <li><a routerLink="/contact">Kapcsolat</a></li>
+      </ul>
+    </div>
+
+    <!-- Segítség -->
+    <div class="footer-section">
+      <h4>Segítség</h4>
+      <ul>
+        <li><a routerLink="/faq">Gyakori kérdések</a></li>
+        <li><a routerLink="/terms">Felhasználási feltételek</a></li>
+        <li><a routerLink="/privacy">Adatvédelem</a></li>
+        <li><a routerLink="/support">Ügyfélszolgálat</a></li>
+      </ul>
+    </div>
+
+    <!-- Kapcsolat -->
+    <div class="footer-section">
+      <h4>Kapcsolat</h4>
+      <ul class="contact-list">
+        <li><i class="pi pi-envelope"></i> info&#64;flavorfleet.hu</li>
+        <li><i class="pi pi-phone"></i> +36 1 234 5678</li>
+        <li><i class="pi pi-map-marker"></i> Budapest, Fő utca 1.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p-divider></p-divider>
+
+  <div class="footer-bottom">
+    <span>&copy; {{ currentYear }} FlavorFleet. Minden jog fenntartva.</span>
+  </div>
+</footer>
