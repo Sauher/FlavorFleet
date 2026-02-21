@@ -1,0 +1,373 @@
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+
+.hero.hero-food {
+  border-radius: 26px;
+  padding: 34px 18px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 18px 55px rgba(40, 20, 90, 0.12);
+
+
+  background-image: url("/assets/kepek/hero-food.png");
+  background-size: cover;
+  background-position: center;
+}
+
+
+.hero.hero-food::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(900px 380px at 50% 30%, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.35) 60%, rgba(255, 255, 255, 0.10)),
+    linear-gradient(180deg, rgba(245, 240, 255, 0.20), rgba(245, 240, 255, 0.55));
+}
+
+.hero-inner {
+  position: relative; 
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(120, 90, 220, 0.18);
+  backdrop-filter: blur(10px);
+  color: #3b2a6d;
+  font-weight: 700;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.hero h1 {
+  margin: 0 0 10px;
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #231a44;
+}
+
+.hero-sub {
+  margin: 0 0 16px;
+  color: rgba(35, 26, 68, 0.75);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.search-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.hero-input {
+  height: 46px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(120, 90, 220, 0.18);
+  backdrop-filter: blur(10px);
+}
+
+.search-btn {
+  height: 46px;
+  border-radius: 16px;
+  font-weight: 800;
+  box-shadow: 0 10px 24px rgba(120, 70, 220, 0.18);
+}
+
+.category-row {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cat-btn {
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 800;
+}
+
+/* mobilon a gomb menjen le */
+@media (max-width: 640px) {
+  .search-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* opcionális: a többi kártyát is modernebbé tehetjük */
+.restaurant-card,
+.panel-card {
+  border-radius: 20px;
+  box-shadow: 0 14px 36px rgba(44, 35, 80, 0.10);
+}
+
+.search-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.search-btn {
+  border-radius: 14px;
+  height: 42px;
+}
+
+.category-row {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cat-btn {
+  border-radius: 14px;
+  padding: 10px 14px;
+}
+
+.section {
+  margin-top: 18px;
+}
+
+.section-title {
+  margin: 4px 0 12px;
+  font-weight: 800;
+  color: #2c2350;
+}
+
+.restaurant-card {
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(44, 35, 80, 0.10);
+}
+
+.img-wrap {
+  height: 160px;
+  overflow: hidden;
+}
+.img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-body {
+  padding-top: 4px;
+}
+
+.name-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.name {
+  font-weight: 800;
+  color: #2c2350;
+}
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 6px 0 10px;
+}
+
+.eta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #6b5ea8;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.status-section .status-wrap {
+  border-radius: 18px;
+  padding: 14px 14px 10px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 18px 50px rgba(45, 0, 115, 0.08);
+}
+
+.status-top {
+  padding: 6px 8px 2px;
+}
+
+.status-content {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 16px;
+  align-items: center;
+  padding: 6px 10px 12px;
+}
+
+@media (max-width: 900px) {
+  .status-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+.status-text .big {
+  font-size: 22px;
+  font-weight: 900;
+  color: #2c2350;
+  margin-bottom: 4px;
+}
+
+.status-text .small {
+  color: #6b5ea8;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.track-btn {
+  border-radius: 14px;
+}
+
+.status-illus {
+  display: flex;
+  justify-content: center;
+}
+
+.illus-card {
+  width: 220px;
+  height: 140px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(200px 120px at 30% 30%, rgba(155, 110, 255, 0.25), transparent 60%),
+    radial-gradient(220px 120px at 70% 10%, rgba(255, 110, 180, 0.25), transparent 60%),
+    rgba(245, 243, 255, 0.9);
+  border: 1px solid rgba(120, 90, 220, 0.18);
+}
+
+.illus-label {
+  margin-top: 6px;
+  font-weight: 900;
+  color: #2c2350;
+}
+
+.panel-card {
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(44, 35, 80, 0.10);
+}
+
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order-item {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(245, 243, 255, 0.6);
+  border: 1px solid rgba(120, 90, 220, 0.12);
+}
+
+@media (max-width: 700px) {
+  .order-item {
+    grid-template-columns: 1fr;
+  }
+}
+
+.order-id {
+  font-weight: 900;
+  color: #2c2350;
+  font-size: 12px;
+}
+
+.order-rest {
+  font-weight: 900;
+  color: #2c2350;
+  margin: 4px 0 8px;
+}
+
+.order-lines .line {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: #5d5592;
+  font-weight: 600;
+  margin: 2px 0;
+}
+
+.order-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.order-price {
+  font-weight: 900;
+  color: #2c2350;
+}
+
+.order-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.profile-head {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.profile-name {
+  font-weight: 900;
+  color: #2c2350;
+}
+
+.profile-sub {
+  color: #6b5ea8;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.profile-form {
+  display: grid;
+  gap: 10px;
+}
+
+.field label {
+  display: block;
+  font-weight: 800;
+  color: #2c2350;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
