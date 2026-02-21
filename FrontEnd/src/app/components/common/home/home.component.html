@@ -46,7 +46,9 @@
   <section class="section section-popular section-join section-join--mid">
   <div class="popular-strip">
     <div class="popular-inner">
-      <div class="section-title popular-title">Népszerű éttermek</div>
+      <div class="section-title popular-title">
+        Népszerű éttermek
+     </div>
 
      <div class="grid popular-grid popular-grid--center">
   <div class="col-12 md:col-4" *ngFor="let r of filteredRestaurants">
@@ -86,9 +88,9 @@
 
  <section class="section status-section section-join section-join--bottom">
   <div class="status-wrap status-bg">
-    <div class="status-top">
-      <p-steps [model]="steps" [activeIndex]="activeStepIndex"></p-steps>
-    </div>
+   <div class="status-top steps-animated">
+  <p-steps [model]="steps" [activeIndex]="activeStepIndex"></p-steps>
+</div>
 
     <div class="status-content one-col">
       <div class="status-text">
