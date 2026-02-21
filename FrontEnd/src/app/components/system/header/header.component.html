@@ -1,8 +1,10 @@
 <div class="card">
     <p-menubar [model]="items">
         <ng-template #start>
-            <img src="Logo.png" alt="">
-            <span class="pageTitle">{{ title }}</span>
+            <a routerLink="/home" class="start-link">
+                <img src="Logo.png" alt="">
+                <span class="pageTitle">{{ title }}</span>
+            </a>
         </ng-template>
         <ng-template #item let-item let-root="root">
             <a pRipple class="flex items-center p-menubar-item-link">
@@ -19,8 +21,8 @@
                  <p-button label="Kijelentkezés" [rounded]="true" styleClass="ff-gradient-primary mr-3"></p-button>
             </div>
             <div  class="flex items-center gap-2" *ngIf="!isLoggedIn">
-                <p-button label="Bejelentkezés" [rounded]="true" styleClass="ff-gradient-primary"></p-button>
-                <p-button label="Regisztráció" [rounded]="true" [outlined]="true"></p-button>
+                <a routerLink="/login"><p-button label="Bejelentkezés" [rounded]="true" styleClass="ff-gradient-primary"></p-button></a>
+                <a routerLink="/register"><p-button label="Regisztráció" [rounded]="true" [outlined]="true"></p-button></a>
             </div>
         </ng-template>
     </p-menubar>

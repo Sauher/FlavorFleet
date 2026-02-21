@@ -7,7 +7,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
 import { AuthService } from '../../../services/auth.service';
@@ -16,7 +16,7 @@ import { MessageService } from '../../../services/message.service';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MenubarModule, BadgeModule, AvatarModule, InputTextModule, Ripple, CommonModule,ButtonModule],
+  imports: [MenubarModule, BadgeModule, AvatarModule, InputTextModule, Ripple, CommonModule, ButtonModule, RouterModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
