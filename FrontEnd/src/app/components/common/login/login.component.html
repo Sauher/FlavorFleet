@@ -1,0 +1,82 @@
+<div class="login-page">
+  <div class="login-card">
+    <!-- Left: illustration / branding -->
+    <div class="login-brand">
+      <img src="Logo.png" alt="FlavorFleet" class="brand-logo" />
+      <h2>FlavorFleet</h2>
+      <p>Friss ételek, gyors kiszállítás – közvetlenül a kedvenc éttermeidből.</p>
+    </div>
+
+    <!-- Right: form -->
+    <div class="login-form-side">
+      <h1>Bejelentkezés</h1>
+      <p class="subtitle">Üdv újra! Jelentkezz be a fiókodba.</p>
+
+      <form (ngSubmit)="onLogin()">
+        <!-- Email -->
+        <div class="field">
+          <label for="email">E-mail cím &nbsp;<i class="pi pi-envelope"></i></label>
+          <span class="p-input-icon-left w-full">
+
+            <input
+              id="email"
+              pInputText
+              type="email"
+              class="w-full"
+              placeholder="pelda@email.com"
+              [(ngModel)]="email"
+              name="email"
+              required
+            />
+          </span>
+        </div>
+
+        <!-- Password -->
+        <div class="field">
+          <label for="password">Jelszó &nbsp;<i class="pi pi-lock"></i></label>
+          <p-password
+            id="password"
+            [(ngModel)]="password"
+            name="password"
+            [toggleMask]="true"
+            [feedback]="false"
+            placeholder="Jelszó"
+            styleClass="w-full"
+            inputStyleClass="w-full"
+          ></p-password>
+        </div>
+
+        <!-- Remember + forgot -->
+        <div class="options-row">
+          <div class="remember">
+            <p-checkbox
+              [(ngModel)]="rememberMe"
+              name="rememberMe"
+              [binary]="true"
+              inputId="remember"
+            ></p-checkbox>
+            <label for="remember">Emlékezz rám</label>
+          </div>
+          <a routerLink="/forgot-password" class="forgot-link">Elfelejtett jelszó?</a>
+        </div>
+
+        <!-- Submit -->
+        <p-button
+          type="submit"
+          label="Bejelentkezés"
+          icon="pi pi-sign-in"
+          [rounded]="true"
+          styleClass="w-full ff-gradient-primary"
+          [loading]="loading"
+        ></p-button>
+      </form>
+
+
+      <!-- Register link -->
+      <p class="register-text">
+        Még nincs fiókod?
+        <a routerLink="/register" class="register-link">Regisztrálj itt!</a>
+      </p>
+    </div>
+  </div>
+</div>

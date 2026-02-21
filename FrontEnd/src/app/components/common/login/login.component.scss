@@ -1,0 +1,169 @@
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 160px);
+  padding: 32px 16px;
+}
+
+.login-card {
+  display: flex;
+  max-width: 900px;
+  width: 100%;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(105, 68, 143, 0.12);
+  background: var(--p-surface-card);
+}
+
+.login-brand {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 36px;
+  background: linear-gradient(135deg, #916FBC 0%, #A681C4 50%, #B28AD6 100%);
+  color: #fff;
+  text-align: center;
+
+  .brand-logo {
+    height: 80px;
+    margin-bottom: 20px;
+    filter: brightness(0) invert(1);
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 12px;
+  }
+
+  p {
+    font-size: 0.95rem;
+    opacity: 0.88;
+    line-height: 1.6;
+    max-width: 260px;
+  }
+}
+
+.login-form-side {
+  flex: 1;
+  padding: 48px 40px;
+
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--p-text-color);
+    margin: 0 0 6px;
+  }
+
+  .subtitle {
+    color: var(--p-text-muted-color);
+    font-size: 0.93rem;
+    margin-bottom: 28px;
+  }
+}
+
+.field {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--p-text-color);
+    margin-bottom: 6px;
+  }
+}
+
+.options-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  label {
+    font-size: 0.88rem;
+    color: var(--p-text-muted-color);
+    cursor: pointer;
+  }
+}
+
+.forgot-link {
+  font-size: 0.88rem;
+  color: var(--p-primary-500);
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+::ng-deep .ff-gradient-primary {
+  background: linear-gradient(90deg, #916FBC 0%, #A681C4 100%) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+.register-text {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--p-text-muted-color);
+  margin-top: 8px;
+}
+
+.register-link {
+  color: var(--p-primary-500);
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+:host ::ng-deep .login-card {
+  animation: cardIn 1s ease both;
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    flex-direction: column;
+  }
+
+  .login-brand {
+    padding: 32px 24px;
+
+    .brand-logo {
+      height: 56px;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+    }
+  }
+
+  .login-form-side {
+    padding: 32px 24px;
+  }
+}
