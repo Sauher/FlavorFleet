@@ -16,11 +16,11 @@
             </a>
         </ng-template>
         <ng-template #end>
-            <div class="flex items-center gap-2" *ngIf="isLoggedIn">
+            <div class="end-buttons" *ngIf="isLoggedIn">
                 <i class="pi pi-shopping-cart"></i>
-                 <p-button label="Kijelentkezés" [rounded]="true" styleClass="ff-gradient-primary mr-3"></p-button>
+                 <p-button label="Kijelentkezés" [rounded]="true" styleClass="ff-gradient-primary mr-3" (click)="onLogout()"></p-button>
             </div>
-            <div  class="flex items-center gap-2" *ngIf="!isLoggedIn">
+            <div class="end-buttons" *ngIf="!isLoggedIn">
                 <a routerLink="/login"><p-button label="Bejelentkezés" [rounded]="true" styleClass="ff-gradient-primary"></p-button></a>
                 <a routerLink="/register"><p-button label="Regisztráció" [rounded]="true" [outlined]="true"></p-button></a>
             </div>

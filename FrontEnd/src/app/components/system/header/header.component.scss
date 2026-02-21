@@ -40,4 +40,88 @@ img{
   background: linear-gradient(90deg, #916FBC 0%, #A681C4 100%) !important;
   border: none !important;
   color: white !important;
+  font-weight: 800 !important;
+  box-shadow: 0 10px 24px rgba(120, 70, 220, 0.18) !important;
+  transition: transform 200ms ease, box-shadow 200ms ease !important;
+
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 14px 30px rgba(120, 70, 220, 0.28) !important;
+  }
+}
+
+::ng-deep .end-buttons .p-button-outlined {
+  border-radius: 14px !important;
+  font-weight: 800 !important;
+  border: 1px solid rgba(120, 90, 220, 0.18) !important;
+  box-shadow: 0 10px 22px rgba(35, 20, 80, 0.10) !important;
+  transition: transform 200ms ease, box-shadow 200ms ease !important;
+
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 14px 28px rgba(35, 20, 80, 0.18) !important;
+  }
+}
+
+/* Hamburger button hover */
+::ng-deep .p-menubar-button {
+  transition: all 250ms ease;
+  border-radius: 8px;
+  margin-left: auto;
+
+  &:hover {
+    background-color: var(--p-surface-hover) !important;
+    transform: scale(1.1);
+  }
+}
+
+/* End buttons layout */
+.end-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Hide mobile-only menu items on desktop */
+::ng-deep .mobile-only-item,
+::ng-deep .mobile-only-separator {
+  display: none !important;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  /* Hide end buttons on mobile */
+  ::ng-deep .p-menubar-end {
+    display: none !important;
+  }
+
+  /* Make menu items full width */
+  ::ng-deep .p-menubar-root-list {
+    width: 100% !important;
+  }
+
+  ::ng-deep .p-menubar-root-list > .p-menubar-item {
+    width: 100% !important;
+  }
+
+  ::ng-deep .p-menubar-item-content {
+    width: 100% !important;
+  }
+
+  ::ng-deep .p-menubar-item-link {
+    width: 100% !important;
+  }
+
+  /* Show mobile-only menu items in hamburger */
+  ::ng-deep .mobile-only-item,
+  ::ng-deep .mobile-only-separator {
+    display: flex !important;
+    width: 100% !important;
+  }
+
+  /* Remove hover effect on menu items */
+  ::ng-deep .p-menubar-item-link:hover {
+    background-color: transparent !important;
+    transform: none !important;
+  }
 }
