@@ -1,1 +1,78 @@
-<p>profile works!</p>
+<div class="profile-page">
+
+  <section class="profile-hero">
+    <div class="profile-head">
+      <p-avatar [image]="user.avatarUrl" size="xlarge" shape="circle"></p-avatar>
+
+      <div class="profile-id">
+        <div class="name">{{ user.name }}</div>
+        <div class="email">{{ user.email }}</div>
+
+        <button pButton label="Szerkeszt" class="btn-edit" (click)="editProfile()"></button>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section">
+    <div class="section-title">Személyes adatok</div>
+
+    <p-card styleClass="panel-card">
+      <div class="rows">
+        <div class="row" *ngFor="let item of personalCards">
+          <div class="left">
+            <div class="row-title">
+              <i class="{{ item.icon }}"></i>
+              <span>{{ item.title }}</span>
+            </div>
+            <div class="row-sub">{{ item.subtitle }}</div>
+          </div>
+
+          <button
+            pButton
+            [label]="item.action"
+            class="btn-view"
+            (click)="openPersonal(item)"
+          ></button>
+        </div>
+      </div>
+    </p-card>
+  </section>
+
+  <section class="section">
+    <div class="section-title">Kedvencek</div>
+
+    <div class="grid fav-grid">
+      <div class="col-12 md:col-4" *ngFor="let f of favorites">
+        <p-card styleClass="fav-card">
+          <ng-template pTemplate="header">
+            <div class="fav-img">
+              <img [src]="f.imageUrl" [alt]="f.name" />
+            </div>
+          </ng-template>
+
+          <div class="fav-body">
+            <div class="fav-name">{{ f.name }}</div>
+
+            <div class="fav-meta">
+              <p-rating [(ngModel)]="f.rating" [readonly]="true" ></p-rating>
+
+              <div class="fav-eta">
+                <i class="pi pi-clock"></i>
+                <span>{{ f.etaMin }}m</span>
+              </div>
+            </div>
+
+            <button
+              pButton
+              icon="pi pi-search"
+              label="Részletek"
+              class="btn-details p-button-outlined"
+              (click)="openFavorite(f)"
+            ></button>
+          </div>
+        </p-card>
+      </div>
+    </div>
+  </section>
+</div>
