@@ -359,7 +359,7 @@
 .status-section .status-wrap {
   border-radius: 18px;
   padding: 14px 14px 10px;
-  background: rgba(255, 255, 255, 0.85);
+  background: transparent;
   box-shadow: 0 18px 50px rgba(45, 0, 115, 0.08);
 }
 
@@ -473,10 +473,20 @@
   margin: 0 !important;
 }
 
-.status-bg {
+.status-section {
   background-image: url("../../../../assets/kepek/Szallito.png");
   background-size: cover;
   background-position: center;
+  position: relative;
+  border-radius: 0 0 18px 18px;
+  overflow: hidden;
+}
+
+.status-section .status-wrap {
+  position: relative;
+  border-radius: 0 0 18px 18px;
+  padding: 14px 14px 10px;
+  background: transparent;
 }
 
 .category-row--chips {
