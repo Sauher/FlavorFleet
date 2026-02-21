@@ -1,1 +1,70 @@
-<p>restaurants works!</p>
+<div class="restaurants-page">
+  <!-- FEJLÉC / SZŰRŐK -->
+  <section class="restaurants-hero">
+    <div class="hero-left">
+      <div class="hero-title">Éttermek</div>
+      <div class="hero-sub">Keresés név alapján, vagy szűrés a kínálat típusa szerint.</div>
+    </div>
+
+    <div class="hero-actions">
+      <span class="p-input-icon-left w-full">
+        
+        <input
+          pInputText
+          class="w-full hero-input"
+          type="text"
+          placeholder="Keresés étterem név szerint..."
+          [(ngModel)]="query"
+        />
+      </span>
+
+      <p-multiSelect
+        [options]="typeOptions"
+        optionLabel="label"
+        optionValue="value"
+        [(ngModel)]="selectedTypes"
+        placeholder="Típus szűrés (pl. Pizza)"
+        display="chip"
+        styleClass="types-ms w-full"
+      ></p-multiSelect>
+
+      <button pButton class="btn-clear p-button-outlined" icon="pi pi-times" label="Törlés" (click)="clearFilters()"></button>
+    </div>
+  </section>
+
+
+  <section class="section">
+    <div class="grid rest-grid">
+      <div class="col-12 sm:col-6 lg:col-4" *ngFor="let r of filteredRestaurants">
+        <p-card styleClass="rest-card">
+          <ng-template pTemplate="header">
+            <div class="rest-img">
+              <img [src]="r.imageUrl" [alt]="r.name" />
+            </div>
+          </ng-template>
+
+          <div class="rest-body">
+            <div class="rest-name">{{ r.name }}</div>
+            <div class="rest-desc">{{ r.desc }}</div>
+
+            <div class="rest-tags">
+              <p-tag
+                *ngFor="let t of r.types"
+                [value]="t"
+                [severity]="typeSeverity(t)"
+              ></p-tag>
+            </div>
+
+            <div class="rest-actions">
+              <button pButton class="btn-open" icon="pi pi-arrow-right" label="Megnyitás" (click)="openRestaurant(r)"></button>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </div>
+
+    <div class="empty" *ngIf="filteredRestaurants.length === 0">
+      Nincs találat. Próbáld más kereséssel vagy szűrőkkel.
+    </div>
+  </section>
+</div>
