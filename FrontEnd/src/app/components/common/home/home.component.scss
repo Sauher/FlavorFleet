@@ -101,6 +101,7 @@
 .section-popular.section-join--mid {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
+  background-color: #eceafabe
 }
 
 .popular-strip {
@@ -259,7 +260,6 @@
 
 .popular-strip {
   width: 100%;
-  background: rgba(30, 20, 60, 0.08); 
   border-radius: 0; 
   padding: 18px 0; 
   
@@ -496,6 +496,7 @@
   background-size: cover;
   background-position: center;
 }
+
 
 .category-row--chips {
   margin-top: 34px;
