@@ -1,0 +1,193 @@
+<div class="page">
+ 
+  <section class="hero hero-food">
+  <div class="hero-inner">
+    <div class="hero-pill">
+      <i class="pi pi-bolt"></i>
+      <span>Gyors • Friss • Egyszerű</span>
+    </div>
+
+    <h1>Rendelj finom ételeket pillanatok alatt!</h1>
+    <p class="hero-sub">
+      Keress éttermet vagy kedvenc fogást, és kövesd a rendelésed valós időben.
+    </p>
+
+    <div class="search-row">
+      <span class="p-input-icon-left w-full">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          class="w-full hero-input"
+          type="text"
+          placeholder="Étterem vagy étel keresése..."
+          [(ngModel)]="query"
+        />
+      </span>
+
+      <button pButton label="Keresés" icon="pi pi-search" class="search-btn"></button>
+    </div>
+
+    <div class="category-row">
+      <button
+        *ngFor="let c of categories"
+        pButton
+        type="button"
+        [label]="c.label"
+        class="cat-btn"
+        [outlined]="selectedCategory !== c.value"
+        
+      ></button>
+    </div>
+  </div>
+</section>
+
+  <!-- NÉPSZERŰ ÉTTERMEK -->
+  <section class="section">
+    <div class="section-title">Népszerű éttermek</div>
+
+    <div class="grid">
+      <div class="col-12 md:col-4" *ngFor="let r of filteredRestaurants">
+        <p-card styleClass="restaurant-card">
+          <ng-template pTemplate="header">
+            <div class="img-wrap">
+              <img [src]="r.imageUrl" [alt]="r.name" />
+            </div>
+          </ng-template>
+
+          <div class="card-body">
+            <div class="name-row">
+              <div class="name">{{ r.name }}</div>
+            </div>
+
+            <div class="meta-row">
+              <p-rating [(ngModel)]="r.rating" [readonly]="true" ></p-rating>
+
+              <div class="eta">
+                <i class="pi pi-clock"></i>
+                <span>{{ r.etaMin }}m</span>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button pButton icon="pi pi-bookmark" label="Remenés" class="p-button-outlined p-button-sm"></button>
+              <button pButton icon="pi pi-shopping-bag" label="Rendelés" class="p-button-sm" (click)="orderNow(r)"></button>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÁLLAPOT / ÚTON -->
+  <section class="section status-section">
+    <div class="status-wrap">
+      <div class="status-top">
+        <p-steps [model]="steps" [activeIndex]="activeStepIndex"></p-steps>
+      </div>
+
+      <div class="status-content">
+        <div class="status-text">
+          <div class="big">Rendelésed úton van!</div>
+          <div class="small">Érkezés várható: <b>{{ currentOrderEta }} perc</b></div>
+
+          <button pButton label="Rendelés követése" icon="pi pi-map-marker" class="track-btn"></button>
+        </div>
+
+     
+        <div class="status-illus">
+          <div class="illus-card">
+            <i class="pi pi-truck" style="font-size: 3rem"></i>
+            <div class="illus-label">Úton</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section">
+    <div class="grid">
+      <!-- RENDELÉSEIM -->
+      <div class="col-12 lg:col-6">
+        <p-card styleClass="panel-card" header="Rendeléseim">
+          <div class="order-list">
+            <div class="order-item" *ngFor="let o of orders">
+              <div class="order-left">
+                <div class="order-id">#{{ o.id }}</div>
+                <div class="order-rest">{{ o.restaurant }}</div>
+
+                <div class="order-lines">
+                  <div class="line" *ngFor="let l of o.lines">
+                    <i class="pi pi-check"></i>
+                    <span>{{ l }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="order-right">
+                <p-tag [value]="o.status" ></p-tag>
+                <div class="order-price">{{ formatFt(o.priceFt) }}</div>
+
+                <div class="order-actions">
+                  <button pButton label="Rendelés követése" class="p-button-sm"></button>
+                  <button pButton label="Kosár megjelenítése" class="p-button-outlined p-button-sm"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- PROFILOM -->
+      <div class="col-12 lg:col-6">
+        <p-card styleClass="panel-card" header="Profilom">
+          <div class="profile-head">
+            <p-avatar image="https://i.pravatar.cc/120?img=12" size="large" shape="circle"></p-avatar>
+
+            <div class="profile-head-text">
+              <div class="profile-name">{{ profile.fullName }}</div>
+              <div class="profile-sub">{{ profile.email }}</div>
+            </div>
+          </div>
+
+          <p-divider></p-divider>
+
+          <div class="profile-form">
+            <div class="field">
+              <label>Név</label>
+              <input pInputText class="w-full" [(ngModel)]="profile.fullName" />
+            </div>
+
+            <div class="field">
+              <label>Email</label>
+              <input pInputText class="w-full" [(ngModel)]="profile.email" />
+            </div>
+
+            <div class="field">
+              <label>Telefon</label>
+              <p-inputMask
+                class="w-full"
+                mask="99 99 999 9999"
+                [(ngModel)]="profile.phone"
+              ></p-inputMask>
+            </div>
+
+            <div class="field">
+              <label>Cím</label>
+              <input pInputText class="w-full" [(ngModel)]="profile.address" />
+            </div>
+
+            <button pButton class="w-full" label="Adatok frissítése" icon="pi pi-save" (click)="updateProfile()"></button>
+            <button
+              pButton
+              class="w-full p-button-outlined"
+              label="Jelszó módosítása"
+              icon="pi pi-lock"
+              (click)="changePassword()"
+            ></button>
+          </div>
+        </p-card>
+      </div>
+    </div>
+  </section>
+</div>
