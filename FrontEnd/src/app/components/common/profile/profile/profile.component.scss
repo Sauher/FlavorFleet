@@ -1,0 +1,169 @@
+.profile-page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 22px 16px 40px;
+}
+
+.profile-hero {
+  border-radius: 22px;
+  padding: 18px 16px;
+  background:
+    radial-gradient(900px 360px at 20% 20%, rgba(255, 140, 210, 0.18), transparent 55%),
+    radial-gradient(900px 360px at 80% 10%, rgba(120, 90, 220, 0.18), transparent 55%),
+    rgba(255, 255, 255, 0.78);
+  box-shadow: 0 18px 50px rgba(45, 0, 115, 0.08);
+}
+
+.profile-head {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.profile-id .name {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #231a44;
+}
+
+.profile-id .email {
+  margin-top: 2px;
+  color: rgba(35, 26, 68, 0.75);
+  font-weight: 600;
+}
+
+.btn-edit {
+  margin-top: 10px;
+  border-radius: 12px;
+  font-weight: 800;
+  box-shadow: 0 10px 22px rgba(120, 70, 220, 0.18);
+}
+
+.section {
+  margin-top: 18px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: #231a44;
+  margin: 8px 0 12px;
+}
+
+.panel-card {
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(44, 35, 80, 0.10);
+}
+
+.rows {
+  display: grid;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 12px;
+  border-radius: 14px;
+  background: rgba(245, 243, 255, 0.55);
+  border: 1px solid rgba(120, 90, 220, 0.12);
+}
+
+.row-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 900;
+  color: #231a44;
+}
+
+.row-title i {
+  color: rgba(120, 90, 220, 0.9);
+}
+
+.row-sub {
+  margin-top: 4px;
+  color: rgba(35, 26, 68, 0.65);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.btn-view {
+  border-radius: 12px;
+  font-weight: 800;
+  padding: 10px 14px;
+}
+
+.fav-grid {
+  justify-content: center;
+}
+
+:host ::ng-deep .fav-card.p-card {
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 14px 36px rgba(44, 35, 80, 0.10);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+:host ::ng-deep .fav-card.p-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 55px rgba(44, 35, 80, 0.18);
+}
+
+.fav-img {
+  height: 130px;
+  overflow: hidden;
+  border-radius: 18px 18px 0 0;
+}
+
+.fav-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1);
+  transition: transform 220ms ease;
+}
+
+:host ::ng-deep .fav-card.p-card:hover .fav-img img {
+  transform: scale(1.06);
+}
+
+.fav-body {
+  padding-top: 2px;
+}
+
+.fav-name {
+  font-weight: 900;
+  color: #231a44;
+  margin-bottom: 6px;
+}
+
+.fav-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.fav-eta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #6b5ea8;
+  font-weight: 800;
+}
+
+/* sárga csillagok */
+:host ::ng-deep .p-rating .p-rating-icon,
+:host ::ng-deep .p-rating .p-rating-icon.p-rating-icon-active {
+  color: #f5b301 !important;
+}
+
+.btn-details {
+  border-radius: 12px;
+  font-weight: 800;
+}
