@@ -54,11 +54,12 @@ export class HomeComponent {
   query = '';
   selectedCategory: Category | 'All' = 'All';
 
-  categories: { label: string; value: Category | 'All'; icon: string }[] = [
-    { label: 'Pizza', value: 'Pizza', icon: 'pi pi-heart-fill' },
-    { label: 'Burger', value: 'Burger', icon: 'pi pi-star-fill' },
-    { label: 'Sushi', value: 'Sushi', icon: 'pi pi-check-circle' },
-  ];
+  categories = [
+  { label: 'Pizza', value: 'Pizza', icon: 'pi pi-fw pi-bolt' },   // ha nincs food icon
+  { label: 'Burger', value: 'Burger', icon: 'pi pi-fw pi-star' },
+  { label: 'Sushi', value: 'Sushi', icon: 'pi pi-fw pi-heart' },
+];
+ 
 
   restaurants: Restaurant[] = [
     {
