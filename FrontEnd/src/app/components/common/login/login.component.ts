@@ -56,7 +56,7 @@ export class LoginComponent {
             this.auth.storeUser(res.token);
           }
           this.msg.show('success', 'Siker', 'Sikeres bejelentkezés!');
-          this.router.navigate(['/']);
+          this.router.navigate(['/home']);
         }
       },
       error: (err: any) => {
