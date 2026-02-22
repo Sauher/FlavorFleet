@@ -8,10 +8,10 @@
   border-radius: 22px;
   padding: 18px 16px;
   background:
-    radial-gradient(900px 360px at 20% 20%, rgba(255, 140, 210, 0.18), transparent 55%),
-    radial-gradient(900px 360px at 80% 10%, rgba(120, 90, 220, 0.18), transparent 55%),
-    rgba(255, 255, 255, 0.78);
-  box-shadow: 0 18px 50px rgba(45, 0, 115, 0.08);
+    radial-gradient(900px 360px at 20% 20%, color-mix(in srgb, var(--p-primary-300) 18%, transparent), transparent 55%),
+    radial-gradient(900px 360px at 80% 10%, color-mix(in srgb, var(--p-primary-500) 18%, transparent), transparent 55%),
+    color-mix(in srgb, var(--p-surface-overlay) 78%, transparent);
+  box-shadow: 0 18px 50px color-mix(in srgb, var(--p-primary-900) 8%, transparent);
 }
 
 .profile-head {
@@ -24,12 +24,12 @@
   font-size: 26px;
   font-weight: 900;
   letter-spacing: -0.02em;
-  color: #231a44;
+  color: var(--p-text-color);
 }
 
 .profile-id .email {
   margin-top: 2px;
-  color: rgba(35, 26, 68, 0.75);
+  color: var(--p-text-muted-color);
   font-weight: 600;
 }
 
@@ -37,7 +37,7 @@
   margin-top: 10px;
   border-radius: 12px;
   font-weight: 800;
-  box-shadow: 0 10px 22px rgba(120, 70, 220, 0.18);
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--p-primary-500) 18%, transparent);
 }
 
 .section {
@@ -47,13 +47,13 @@
 .section-title {
   font-size: 18px;
   font-weight: 900;
-  color: #231a44;
+  color: var(--p-text-color);
   margin: 8px 0 12px;
 }
 
 .panel-card {
   border-radius: 18px;
-  box-shadow: 0 12px 30px rgba(44, 35, 80, 0.10);
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--p-primary-900) 10%, transparent);
 }
 
 .rows {
@@ -67,8 +67,8 @@
   align-items: center;
   padding: 12px 12px;
   border-radius: 14px;
-  background: rgba(245, 243, 255, 0.55);
-  border: 1px solid rgba(120, 90, 220, 0.12);
+  background: color-mix(in srgb, var(--p-surface-hover) 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--p-primary-500) 12%, transparent);
 }
 
 .row-title {
@@ -76,16 +76,16 @@
   align-items: center;
   gap: 10px;
   font-weight: 900;
-  color: #231a44;
+  color: var(--p-text-color);
 }
 
 .row-title i {
-  color: rgba(120, 90, 220, 0.9);
+  color: color-mix(in srgb, var(--p-primary-500) 90%, transparent);
 }
 
 .row-sub {
   margin-top: 4px;
-  color: rgba(35, 26, 68, 0.65);
+  color: var(--p-text-muted-color);
   font-weight: 600;
   font-size: 13px;
 }
@@ -103,13 +103,13 @@
 :host ::ng-deep .fav-card.p-card {
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 14px 36px rgba(44, 35, 80, 0.10);
+  box-shadow: 0 14px 36px color-mix(in srgb, var(--p-primary-900) 10%, transparent);
   transition: transform 200ms ease, box-shadow 200ms ease;
 }
 
 :host ::ng-deep .fav-card.p-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 22px 55px rgba(44, 35, 80, 0.18);
+  box-shadow: 0 22px 55px color-mix(in srgb, var(--p-primary-900) 18%, transparent);
 }
 
 .fav-img {
@@ -137,7 +137,7 @@
 
 .fav-name {
   font-weight: 900;
-  color: #231a44;
+  color: var(--p-text-color);
   margin-bottom: 6px;
 }
 
@@ -153,7 +153,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #6b5ea8;
+  color: var(--p-text-muted-color);
   font-weight: 800;
 }
 
@@ -177,7 +177,7 @@
 :host ::ng-deep .profile-actions .p-button.p-button-link {
   padding: 0;
   font-weight: 800;
-  color: #6d28d9;
+  color: var(--p-primary-800);
 }
 
 :host ::ng-deep .profile-actions .p-button.p-button-link:hover {
@@ -199,7 +199,7 @@
 .field label {
   display: block;
   font-weight: 800;
-  color: #231a44;
+  color: var(--p-text-color);
   margin-bottom: 6px;
   font-size: 12px;
 }

@@ -41,29 +41,29 @@ img{
     }
 }
 ::ng-deep .ff-gradient-primary {
-  background: linear-gradient(90deg, #916FBC 0%, #A681C4 100%) !important;
+  background: linear-gradient(90deg, var(--p-primary-700) 0%, var(--p-primary-500) 100%) !important;
   border: none !important;
   color: white !important;
   font-weight: 800 !important;
-  box-shadow: 0 10px 24px rgba(120, 70, 220, 0.18) !important;
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--p-primary-500) 18%, transparent) !important;
   transition: transform 200ms ease, box-shadow 200ms ease !important;
 
   &:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 14px 30px rgba(120, 70, 220, 0.28) !important;
+    box-shadow: 0 14px 30px color-mix(in srgb, var(--p-primary-500) 28%, transparent) !important;
   }
 }
 
 ::ng-deep .end-buttons .p-button-outlined {
   border-radius: 14px !important;
   font-weight: 800 !important;
-  border: 1px solid rgba(120, 90, 220, 0.18) !important;
-  box-shadow: 0 10px 22px rgba(35, 20, 80, 0.10) !important;
+  border: 1px solid color-mix(in srgb, var(--p-primary-500) 18%, transparent) !important;
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--p-primary-900) 10%, transparent) !important;
   transition: transform 200ms ease, box-shadow 200ms ease !important;
 
   &:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 14px 28px rgba(35, 20, 80, 0.18) !important;
+    box-shadow: 0 14px 28px color-mix(in srgb, var(--p-primary-900) 18%, transparent) !important;
   }
 }
 
