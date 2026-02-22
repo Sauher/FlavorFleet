@@ -1,0 +1,298 @@
+<div class="admin-page">
+
+  
+
+ 
+  <section class="hero-card">
+    <div class="hero-bg" [style.backgroundImage]="'url(' + restaurant.coverUrl + ')'"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="logo-wrap">
+          <img [src]="restaurant.coverUrl" alt="cover" />
+        </div>
+
+        <div class="hero-title">
+          <div class="name-row">
+            <div class="r-name">{{ restaurant.name }}</div>
+            <div class="stars">★★★★★</div>
+          </div>
+
+          
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <p-card styleClass="side-card">
+          <div class="side-title">Étterem kezelése</div>
+
+          <div class="open-row">
+            <div class="open-left">
+              <div class="label">Nyitva</div>
+              <div class="hint">{{ restaurant.isOpen ? 'Aktív kiszolgálás' : 'Zárva' }}</div>
+            </div>
+
+            <p-toggleButton
+              [(ngModel)]="restaurant.isOpen"
+              onLabel=""
+              offLabel=""
+              onIcon=" pi-check"
+              offIcon="pi pi-times"
+              styleClass="open-toggle"
+            ></p-toggleButton>
+          </div>
+
+          <p-divider></p-divider>
+
+          <div class="side-subtitle">Nyitvatartási idő:</div>
+          <div class="hours">
+            <div class="hour-row" *ngFor="let h of hours">
+              <div class="day">{{ h.day }}</div>
+              <div class="time">{{ h.open }} - {{ h.close }}</div>
+            </div>
+          </div>
+
+          
+        </p-card>
+
+        <p-card styleClass="side-card">
+          <div class="side-title">Forgalmi adatok</div>
+
+          <div class="stat-row">
+            <div class="stat">
+              <div class="s-label"><i class="pi pi-shopping-bag"></i> Mai rendelések</div>
+              <div class="s-value">{{ stats.todayOrders }}</div>
+            </div>
+            <div class="stat">
+              <div class="s-label"><i class="pi pi-wallet"></i> E havi bevétel</div>
+              <div class="s-value">{{ formatFt(stats.weekRevenueFt) }}</div>
+            </div>
+            <div class="stat">
+              <div class="s-label"><i class="pi pi-clock"></i> Nyitott rendelések</div>
+              <div class="s-value">{{ stats.openOrders }}</div>
+            </div>
+          </div>
+
+          <div class="chart-wrap">
+            <p-chart type="bar" [data]="chartData" [options]="chartOptions"></p-chart>
+          </div>
+        </p-card>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="main-grid main-grid--single">
+  <p-card styleClass="main-card">
+      <div class="card-title">Étlap kezelése</div>
+      <div class="card-sub">Új étel hozzáadása</div>
+
+      <div class="add-wrap">
+  <div class="add-row add-row--nice">
+   
+    <div class="add-col add-col--image">
+      <div class="preview" *ngIf="newItem.imageDataUrl; else emptyPreview">
+        <img [src]="newItem.imageDataUrl" alt="Új étel képe" />
+        <button
+          pButton
+          class="icon-only p-button-rounded p-button-text remove-img"
+          icon="pi pi-times"
+          (click)="removePickedImage()"
+        ></button>
+      </div>
+
+      <ng-template #emptyPreview>
+        <div class="preview empty">
+          <i class="pi pi-image"></i>
+          <span>Kép</span>
+        </div>
+      </ng-template>
+
+      <p-fileUpload
+        mode="basic"
+        chooseLabel="Kép feltöltése"
+        accept="image/*"
+        [auto]="true"
+        [customUpload]="true"
+        (uploadHandler)="onPickImage($event)"
+        styleClass="upload-basic"
+      ></p-fileUpload>
+    </div>
+
+    
+    <div class="add-col add-col--name">
+      <label class="mini-label">Étel neve</label>
+      <input pInputText class="w-full add-name" placeholder="Pl. Margherita Pizza" [(ngModel)]="newItem.name" />
+    </div>
+
+ 
+    <div class="add-col add-col--price">
+      <label class="mini-label">Ár</label>
+      <p-inputNumber
+        [(ngModel)]="newItem.priceFt"
+        [min]="0"
+        [mode]="'currency'"
+        currency="HUF"
+        locale="hu-HU"
+        inputStyleClass="add-price"
+      ></p-inputNumber>
+    </div>
+
+   
+    <div class="add-col add-col--cat">
+      <label class="mini-label">Kategória</label>
+      <p-dropdown
+        [options]="categoryOptions"
+        optionLabel="label"
+        optionValue="value"
+        [(ngModel)]="newItem.category"
+        styleClass="add-dd w-full"
+        placeholder="Pizza"
+      ></p-dropdown>
+    </div>
+
+    
+    <div class="add-col add-col--save">
+      <label class="mini-label">&nbsp;</label>
+      <button pButton icon="pi pi-check" class="btn-add btn-add--big" (click)="addItem()"></button>
+    </div>
+  </div>
+</div>
+
+      <div class="items-list">
+        <div class="item" *ngFor="let it of items">
+          <div class="thumb">
+            <img [src]="it.imageUrl" [alt]="it.name" />
+          </div>
+
+          <div class="info">
+            <div class="i-top">
+              <div class="i-name">{{ it.name }}</div>
+              <div class="i-price">{{ formatFt(it.priceFt) }}</div>
+            </div>
+
+            <div class="i-sub">
+              <p-tag [value]="it.category" severity="info"></p-tag>
+              <span class="muted" *ngIf="!it.enabled">Rejtett</span>
+            </div>
+
+            <div class="i-actions">
+            <button pButton class="icon-only p-button-outlined" icon="pi pi-pencil" (click)="openEdit(it)"></button>
+
+              <button
+                pButton
+                class="p-button-text"
+                icon="pi pi-eye"
+                [label]="it.enabled ? 'Aktív' : 'Inaktív'"
+                (click)="toggleEnabled(it)"
+              ></button>
+
+              <button
+                pButton
+                class="p-button-text danger"
+                icon="pi pi-trash"
+                label="Törlés"
+                (click)="deleteItem(it)"
+              ></button>
+            </div>
+          </div>
+
+          <div class="quick-icons">
+            <button pButton class="icon-only p-button-outlined" icon="pi pi-pencil" (click)="editItem(it)"></button>
+            <button pButton class="icon-only p-button-outlined" icon="pi pi-trash" (click)="deleteItem(it)"></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pager">
+        <div class="muted">1–4 találat | 12 étel</div>
+        <div class="pager-btns">
+          <button pButton class="p-button-outlined" label="Előző"></button>
+          <button pButton class="p-button-outlined" label="Következő"></button>
+        </div>
+      </div>
+    </p-card>
+
+
+    <div class="right-spacer"></div>
+  </section>
+</div>
+
+<p-dialog
+  header="Étel szerkesztése"
+  [(visible)]="editVisible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '720px', maxWidth: '95vw' }"
+>
+  <div class="edit-grid">
+    
+    <div class="edit-image">
+      <div class="edit-preview" *ngIf="editModel.imageDataUrl; else editEmpty">
+        <img [src]="editModel.imageDataUrl" alt="Étel képe" />
+        <button
+          pButton
+          class="icon-only p-button-rounded p-button-text remove-img"
+          icon="pi pi-times"
+          (click)="removeEditImage()"
+          pTooltip="Kép törlése"
+        ></button>
+      </div>
+
+      <ng-template #editEmpty>
+        <div class="edit-preview empty">
+          <i class="pi pi-image"></i>
+          <span>Nincs kép</span>
+        </div>
+      </ng-template>
+
+      <p-fileUpload
+        mode="basic"
+        chooseLabel="Kép cseréje"
+        accept="image/*"
+        [auto]="true"
+        [customUpload]="true"
+        (uploadHandler)="onPickEditImage($event)"
+        styleClass="upload-basic"
+      ></p-fileUpload>
+    </div>
+
+
+    <div class="edit-form">
+      <div class="field">
+        <label>Név</label>
+        <input pInputText class="w-full" [(ngModel)]="editModel.name" />
+      </div>
+
+      <div class="field">
+        <label>Ár</label>
+        <p-inputNumber
+          [(ngModel)]="editModel.priceFt"
+          [min]="0"
+          [mode]="'currency'"
+          currency="HUF"
+          locale="hu-HU"
+          inputStyleClass="w-full"
+        ></p-inputNumber>
+      </div>
+
+      <div class="field">
+        <label>Kategória</label>
+        <p-dropdown
+          [options]="categoryOptions"
+          optionLabel="label"
+          optionValue="value"
+          [(ngModel)]="editModel.category"
+          styleClass="w-full"
+        ></p-dropdown>
+      </div>
+
+      <div class="dialog-actions">
+        <button pButton class="p-button-outlined" label="Mégse" (click)="editVisible=false"></button>
+        <button pButton icon="pi pi-check" label="Mentés" (click)="saveEdit()"></button>
+      </div>
+    </div>
+  </div>
+</p-dialog>
