@@ -26,6 +26,10 @@ module.exports = (sequelize) => {
       allowNull: false,
       defaultValue: "user"
     },
+    pictureURL: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
     status: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -52,7 +56,7 @@ module.exports = (sequelize) => {
         }
     },
     defaultScope: {
-        attributes: { exclude: ["password", "secret"] }
+        attributes: { exclude: ["password"] }
     },
     scopes: {
         withPassword: {

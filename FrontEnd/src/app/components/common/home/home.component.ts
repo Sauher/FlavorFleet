@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -161,9 +160,9 @@ export class HomeComponent implements OnInit {
     console.log('Order:', r);
   }
 
-  statusSeverity(status: OrderItem['status']): 'success' | 'warning' | 'info' {
+  statusSeverity(status: OrderItem['status']): 'success' | 'warn' | 'info' {
     if (status === 'Kiszállítva') return 'success';
-    if (status === 'Folyamatban') return 'warning';
+    if (status === 'Folyamatban') return 'warn';
     return 'info';
   }
 

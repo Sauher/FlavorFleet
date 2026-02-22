@@ -1,5 +1,5 @@
 .footer {
-  background: linear-gradient(180deg, var(--p-surface-section) 0%, #EDE5F5 100%);
+  background: linear-gradient(180deg, var(--p-surface-section) 0%, var(--p-surface-hover) 100%);
   padding: 48px 24px 0;
   margin-top: 64px;
   border-top: 1px solid var(--p-surface-border);
@@ -7,9 +7,9 @@
 
 .footer-content {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr;
   gap: 40px;
-  max-width: 1100px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -48,7 +48,7 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: rgba(145, 111, 188, 0.12);
+    background: color-mix(in srgb, var(--p-primary-500) 12%, transparent);
     color: var(--p-primary-700);
     transition: all 250ms ease;
 

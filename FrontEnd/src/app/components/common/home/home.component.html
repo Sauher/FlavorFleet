@@ -124,7 +124,7 @@
               </div>
 
               <div class="order-right">
-                <p-tag [value]="o.status" ></p-tag>
+                <p-tag [value]="o.status" [severity]="statusSeverity(o.status)"></p-tag>
                 <div class="order-price">{{ formatFt(o.priceFt) }}</div>
 
                 <div class="order-actions">
