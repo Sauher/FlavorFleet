@@ -9,7 +9,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ApiService } from '../../../services/api.service';
 import { AuthService } from '../../../services/auth.service';
 import { MessageService } from '../../../services/message.service';
 
@@ -26,7 +25,6 @@ constructor(
     private auth: AuthService,
     private msg: MessageService,
     private router: Router,
-    private api: ApiService
   ) { }
   items: MenuItem[] = [];
   isLoggedIn: boolean = true;
@@ -100,6 +98,10 @@ constructor(
               {
                 label: 'Menü kezelése',
                 routerLink: '/menu-management'
+              },
+              {
+                label: 'Beérkezett rendelések',
+                routerLink: '/order-management'
               }
             ]
           }
@@ -109,9 +111,22 @@ constructor(
       // Admin only items
       if (this.isAdmin) {
         menuItems.push(
-          {
-            label: 'User Control Panel',
-            routerLink: '/user-control'
+           {
+            label: 'Kezelőpult',
+            items: [
+              {
+                label: 'Felhasználók kezelése',
+                routerLink: '/user-management'
+              },
+              {
+                label: 'Éttermek kezelése',
+                routerLink: '/restaurant-admin-management'
+              },
+              {
+                label: 'Rendelések kezelése',
+                routerLink: '/order-admin-management'
+              }
+            ]
           }
         );
       }

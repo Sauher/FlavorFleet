@@ -18,7 +18,7 @@
         <ng-template #end>
             <div class="end-buttons" *ngIf="isLoggedIn">
                 <i class="pi pi-shopping-cart"></i>
-                 <p-button label="Kijelentkezés"  styleClass="ff-gradient-primary mr-3" (click)="onLogout()"></p-button>
+                 <p-button label="Kijelentkezés"  styleClass="ff-gradient-primary ml-3 mr-3" (click)="onLogout()"></p-button>
             </div>
             <div class="end-buttons" *ngIf="!isLoggedIn">
                 <a routerLink="/login"><p-button label="Bejelentkezés"  styleClass="ff-gradient-primary"></p-button></a>

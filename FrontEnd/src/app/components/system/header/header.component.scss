@@ -7,6 +7,10 @@
     padding: 0;
     margin: 0;
 }
+::ng-deep .p-menubar-submenu{
+    border-radius: 8px !important;
+    padding: 0.7rem !important;
+}
 ::ng-deep .p-menubar {
     width: 100%;
     border-radius: 0;
