@@ -11,8 +11,9 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.passw
   logging: dbConfig.logging
 });
 const User = require('./user.model.js')(sequelize);
+const Restaurant = require('./restaurant.model.js')(sequelize);
 
-
+db.Restaurant = Restaurant;
 db.User = User;
 
 
