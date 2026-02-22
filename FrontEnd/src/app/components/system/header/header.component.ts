@@ -163,6 +163,8 @@ constructor(
   onLogout() {
     this.auth.logout();
     this.msg.show('success', 'Siker', 'Sikeres kijelentkezés!');
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']).then(() => {
+      window.location.reload();
+    });
   }
 }
