@@ -22,19 +22,7 @@
       <ul>
         <li><a routerLink="/">Főoldal</a></li>
         <li><a routerLink="/restaurants">Éttermek</a></li>
-        <li><a routerLink="/about">Rólunk</a></li>
-        <li><a routerLink="/contact">Kapcsolat</a></li>
-      </ul>
-    </div>
-
-    <!-- Segítség -->
-    <div class="footer-section">
-      <h4>Segítség</h4>
-      <ul>
-        <li><a routerLink="/faq">Gyakori kérdések</a></li>
-        <li><a routerLink="/terms">Felhasználási feltételek</a></li>
-        <li><a routerLink="/privacy">Adatvédelem</a></li>
-        <li><a routerLink="/support">Ügyfélszolgálat</a></li>
+        <li *ngIf="isLoggedIn"><a routerLink="/profile">Profilom</a></li>
       </ul>
     </div>
 
