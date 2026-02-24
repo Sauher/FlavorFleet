@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sikeres regisztráció – FlavorFleet</title>
+  <style>
+    /* Reset */
+    body, table, td, p, a, li, blockquote { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    body { margin: 0; padding: 0; width: 100% !important; }
+    img { border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+
+    /* Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    body {
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #FAF5FC;
+      color: #373251;
+    }
+
+    .email-wrapper {
+      width: 100%;
+      background-color: #FAF5FC;
+      padding: 40px 0;
+    }
+
+    .email-container {
+      max-width: 560px;
+      margin: 0 auto;
+      background-color: #FFFFFF;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(166, 129, 196, 0.10);
+    }
+
+    /* Header gradient bar */
+    .email-header {
+      background: linear-gradient(135deg, #916FBC 0%, #A681C4 50%, #CBAAE9 100%);
+      padding: 36px 40px 32px;
+      text-align: center;
+    }
+
+    .email-header .logo-text {
+      font-size: 28px;
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+
+    .email-header .logo-subtitle {
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.80);
+      margin: 4px 0 0;
+    }
+
+    /* Success icon circle */
+    .icon-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #A681C4 0%, #DFC9F4 100%);
+      margin: -36px auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(166, 129, 196, 0.20);
+    }
+
+    .icon-circle .checkmark {
+      font-size: 34px;
+      color: #FFFFFF;
+      line-height: 1;
+    }
+
+    /* Body */
+    .email-body {
+      padding: 28px 40px 36px;
+      text-align: center;
+    }
+
+    .email-body h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #373251;
+      margin: 20px 0 8px;
+    }
+
+    .email-body .greeting {
+      font-size: 15px;
+      color: #79718C;
+      margin: 0 0 24px;
+      line-height: 1.6;
+    }
+
+    /* Info card */
+    .info-card {
+      background-color: #F9F4FD;
+      border: 1px solid #E7E0EF;
+      border-radius: 14px;
+      padding: 20px 24px;
+      text-align: left;
+      margin-bottom: 28px;
+    }
+
+    .info-card .info-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #79718C;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin: 0 0 4px;
+    }
+
+    .info-card .info-value {
+      font-size: 15px;
+      font-weight: 500;
+      color: #373251;
+      margin: 0 0 14px;
+      word-break: break-word;
+    }
+
+    .info-card .info-value:last-child {
+      margin-bottom: 0;
+    }
+
+    /* CTA Button */
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(90deg, #916FBC 0%, #A681C4 100%);
+      color: #FFFFFF !important;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 14px 36px;
+      border-radius: 14px;
+      box-shadow: 0 10px 24px rgba(166, 129, 196, 0.18);
+      transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(166, 129, 196, 0.28);
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid #E7E0EF;
+      margin: 28px 0;
+    }
+
+    /* Tips section */
+    .tips {
+      text-align: left;
+      padding: 0 40px 32px;
+    }
+
+    .tips h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #373251;
+      margin: 0 0 12px;
+    }
+
+    .tips ul {
+      margin: 0;
+      padding: 0 0 0 20px;
+    }
+
+    .tips ul li {
+      font-size: 13px;
+      color: #79718C;
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+
+    .tips ul li strong {
+      color: #373251;
+    }
+
+    /* Footer */
+    .email-footer {
+      background-color: #F9F4FD;
+      padding: 24px 40px;
+      text-align: center;
+      border-top: 1px solid #E7E0EF;
+    }
+
+    .email-footer p {
+      font-size: 12px;
+      color: #79718C;
+      margin: 0 0 4px;
+      line-height: 1.5;
+    }
+
+    .email-footer a {
+      color: #A681C4;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .email-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media only screen and (max-width: 600px) {
+      .email-container { margin: 0 16px; }
+      .email-header { padding: 28px 24px 24px; }
+      .email-body { padding: 24px 24px 28px; }
+      .tips { padding: 0 24px 24px; }
+      .email-footer { padding: 20px 24px; }
+      .email-header .logo-text { font-size: 24px; }
+      .email-body h1 { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td align="center">
+          <div class="email-container">
+
+            <!-- Header -->
+            <div class="email-header">
+              <p class="logo-text">🍽️ FlavorFleet</p>
+              <p class="logo-subtitle">Ízek, amiket szeretsz – egyenesen hozzád!</p>
+            </div>
+
+            <!-- Success Icon -->
+            <div style="text-align: center;">
+              <div class="icon-circle" style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#A681C4,#DFC9F4);margin:-36px auto 0;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(166,129,196,0.20);">
+                <span class="checkmark" style="font-size:34px;color:#fff;">✓</span>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="email-body">
+              <h1>Sikeres regisztráció! 🎉</h1>
+              <p class="greeting">
+                Kedves <strong><%= name %></strong>,<br/>
+                Üdvözlünk a FlavorFleet családban! A fiókod sikeresen létrejött, és máris elkezdheted felfedezni az éttermeket a közeledben.
+              </p>
+
+              <!-- User info card -->
+              <div class="info-card">
+                <p class="info-label">Felhasználónév</p>
+                <p class="info-value"><%= name %></p>
+                <p class="info-label">E-mail cím</p>
+                <p class="info-value"><%= email %></p>
+              </div>
+
+              <!-- CTA -->
+              <a href="<%= loginUrl %>" class="cta-button">
+                Bejelentkezés →
+              </a>
+
+              <hr class="divider" />
+            </div>
+
+            <!-- Tips -->
+            <div class="tips">
+              <h3>🚀 Első lépések:</h3>
+              <ul>
+                <li><strong>Böngéssz</strong> az éttermek és ételek között</li>
+                <li><strong>Rendelj</strong> pár kattintással</li>
+                <li><strong>Kövesd</strong> a rendelésed valós időben</li>
+                <li><strong>Értékelj</strong> és segíts másoknak választani</li>
+              </ul>
+            </div>
+
+            <!-- Footer -->
+            <div class="email-footer">
+              <p>© <%= new Date().getFullYear() %> FlavorFleet – Minden jog fenntartva.</p>
+              <p>Ha nem te hoztad létre ezt a fiókot, kérjük <a href="mailto:support@flavorfleet.hu">jelezd nekünk</a>.</p>
+            </div>
+
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

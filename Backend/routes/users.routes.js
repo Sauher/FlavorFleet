@@ -1,7 +1,10 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
+const ejs = require("ejs");
+const path = require("path");
 const {User, operatorMap} = require("../models/index");
 const {generateToken,authenticate} = require("../middleware/auth_middleware");
+const { sendMail } = require("../services/mail.service");
 
 router.get("/",authenticate, async (req, res) => {
     User.findAll()
@@ -73,6 +76,15 @@ router.post("/registration", async (req, res) => {
         return res.status(400).json({ message: "Ez az email cím már használatban van!" });
     }
     const user =  await User.create({ name, email, password});
+
+    // Send registration email
+    const html = await ejs.renderFile(
+      path.join(__dirname, "../templates/registration.ejs"),
+      { name, email, loginUrl: process.env.FRONTEND_URL + "/login" }
+    );
+    sendMail({ to: email, subject: "Sikeres regisztráció – FlavorFleet", html })
+      .catch(err => console.error("Registration email failed:", err.message));
+
     res.status(201).json({ user ,message: "Sikeres regisztráció!" });
     } catch(e){
         res.status(500).json({ message: 'Sikertelen regisztráció!', error: e.message });
