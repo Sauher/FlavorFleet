@@ -34,47 +34,6 @@
       box-shadow: 0 8px 32px rgba(166, 129, 196, 0.10);
     }
 
-    /* Header gradient bar */
-    .email-header {
-      background: linear-gradient(135deg, #916FBC 0%, #A681C4 50%, #CBAAE9 100%);
-      padding: 36px 40px 32px;
-      text-align: center;
-    }
-
-    .email-header .logo-text {
-      font-size: 28px;
-      font-weight: 700;
-      color: #FFFFFF;
-      letter-spacing: -0.5px;
-      margin: 0;
-    }
-
-    .email-header .logo-subtitle {
-      font-size: 13px;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 0.80);
-      margin: 4px 0 0;
-    }
-
-    /* Success icon circle */
-    .icon-circle {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #A681C4 0%, #DFC9F4 100%);
-      margin: -36px auto 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 6px 20px rgba(166, 129, 196, 0.20);
-    }
-
-    .icon-circle .checkmark {
-      font-size: 34px;
-      color: #FFFFFF;
-      line-height: 1;
-    }
-
     /* Body */
     .email-body {
       padding: 28px 40px 36px;
@@ -125,26 +84,7 @@
     .info-card .info-value:last-child {
       margin-bottom: 0;
     }
-
-    /* CTA Button */
-    .cta-button {
-      display: inline-block;
-      background: linear-gradient(90deg, #916FBC 0%, #A681C4 100%);
-      color: #FFFFFF !important;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 14px 36px;
-      border-radius: 14px;
-      box-shadow: 0 10px 24px rgba(166, 129, 196, 0.18);
-      transition: transform 200ms ease, box-shadow 200ms ease;
-    }
-
-    .cta-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 30px rgba(166, 129, 196, 0.28);
-    }
-
+    
     /* Divider */
     .divider {
       border: none;
@@ -225,19 +165,6 @@
         <td align="center">
           <div class="email-container">
 
-            <!-- Header -->
-            <div class="email-header">
-              <p class="logo-text">🍽️ FlavorFleet</p>
-              <p class="logo-subtitle">Ízek, amiket szeretsz – egyenesen hozzád!</p>
-            </div>
-
-            <!-- Success Icon -->
-            <div style="text-align: center;">
-              <div class="icon-circle" style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#A681C4,#DFC9F4);margin:-36px auto 0;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(166,129,196,0.20);">
-                <span class="checkmark" style="font-size:34px;color:#fff;">✓</span>
-              </div>
-            </div>
-
             <!-- Body -->
             <div class="email-body">
               <h1>Sikeres regisztráció! 🎉</h1>
@@ -253,11 +180,6 @@
                 <p class="info-label">E-mail cím</p>
                 <p class="info-value"><%= email %></p>
               </div>
-
-              <!-- CTA -->
-              <a href="<%= loginUrl %>" class="cta-button">
-                Bejelentkezés →
-              </a>
 
               <hr class="divider" />
             </div>
