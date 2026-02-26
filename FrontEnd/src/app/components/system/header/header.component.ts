@@ -116,7 +116,7 @@ constructor(
             items: [
               {
                 label: 'Felhasználók kezelése',
-                routerLink: '/user-management'
+                routerLink: '/user-control'
               },
               {
                 label: 'Éttermek kezelése',

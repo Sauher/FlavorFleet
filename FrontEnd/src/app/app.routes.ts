@@ -8,20 +8,26 @@ import { OrdersComponent } from './components/common/orders/orders/orders.compon
 import { MenuManagementComponent } from './components/owner/menu-management/menu-management.component';
 import { OrderManagementComponent } from './components/owner/order-management/order-management.component';
 import { RestaurantManagementComponent } from './components/owner/restaurant-management/restaurant-management.component';
+import { UserControlComponent } from './components/admin/user-control/user-control.component';
 
 export const routes: Routes = [
+
+  //Common Routes
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegistrationComponent },
   { path: 'home', component: HomeComponent},
   { path: 'profile', component: ProfileComponent},
   { path: 'restaurants', component: RestaurantsComponent},
   { path: 'orders', component: OrdersComponent},
+
+  // Owner routes
   { path: 'menu-management', component: MenuManagementComponent},
   { path: 'order-management', component: OrderManagementComponent},
   { path: 'restaurant-management', component: RestaurantManagementComponent},
 
+  //Admin routes
 
-
+  {path: "user-control", component: UserControlComponent},
 
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
