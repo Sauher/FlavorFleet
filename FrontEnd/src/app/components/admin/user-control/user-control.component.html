@@ -1,1 +1,106 @@
-<p>user-control works!</p>
+<div class="user-control-container">
+    <div class="header">
+      <h2><i class="pi pi-users"></i> Felhasználók kezelése</h2>
+    </div>
+  
+    <p-treetable [value]="userTree" [scrollable]="true" [tableStyle]="{'min-width':'60rem'}">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="centerTH">Név</th>
+          <th>Email</th>
+          <th>Szerepkör</th>
+          <th>Státusz</th>
+          <th class="Actions">Műveletek</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+        <tr [ttRow]="rowNode" [ngClass]="{'category-row': rowData.isCategory}">
+          <td>
+            <p-treeTableToggler [rowNode]="rowNode" />
+            <span [class.category-label]="rowData.isCategory">
+              {{ rowData.name }}
+            </span>
+            <span *ngIf="rowData.isCategory" class="user-count">
+              ({{ rowNode.node.children?.length || 0 }})
+            </span>
+          </td>
+          <td>{{ rowData.email }}</td>
+          <td>
+            <p-tag *ngIf="!rowData.isCategory"
+                   [value]="rowData.role"
+                   [severity]="getRoleSeverity(rowData.role)" />
+          </td>
+          <td>
+            <p-tag *ngIf="!rowData.isCategory"
+                   [value]="rowData.status !== false ? 'Aktív' : 'Inaktív'"
+                   [severity]="getStatusSeverity(rowData.status)" />
+          </td>
+          <td class="Actions">    
+            <ng-container *ngIf="!rowData.isCategory">
+              <button pButton icon="pi pi-pencil"
+                      class="p-button-text p-button-rounded p-button-sm"
+                      (click)="editUser(rowData)"
+                      pTooltip="Fiók kezelése"></button>
+              <button pButton icon="pi pi-trash"
+                      class="p-button-text p-button-rounded p-button-danger p-button-sm"
+                      (click)="deleteUser($event, rowData)"
+                      pTooltip="Fiók törlése"></button>
+            </ng-container>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5" style="text-align: center; padding: 2rem;">
+            <i class="pi pi-info-circle" style="font-size: 1.5rem;"></i>
+            <p>Nincsenek felhasználók.</p>
+          </td>
+        </tr>
+      </ng-template>
+    </p-treetable>
+  </div>
+  
+  <!-- Edit Dialog -->
+  <p-dialog header="Fiók szerkesztése"
+            [(visible)]="editDialogVisible"
+            [modal]="true"
+            [style]="{ width: '450px' }"
+            [draggable]="false">
+    <div class="dialog-content">
+      <div class="field">
+        <label for="name">Név</label>
+        <input pInputText id="name" [(ngModel)]="selectedUser.name" class="w-full" />
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input pInputText id="email" [(ngModel)]="selectedUser.email" class="w-full" />
+      </div>
+      <div class="field">
+        <label for="role">Szerepkör</label>
+        <p-select id="role" [(ngModel)]="selectedUser.role"
+                  [options]="roleOptions"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Select a role"
+                  class="w-full" />
+      </div>
+      <div class="field">
+        <label for="status">Státusz</label>
+        <p-select id="status" [(ngModel)]="selectedUser.status"
+                  [options]="statusOptions"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Select status"
+                  class="w-full" />
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton label="Mégsem" icon="pi pi-times"
+              class="p-button-text"
+              (click)="editDialogVisible = false"></button>
+      <button pButton label="Mentés" icon="pi pi-check"
+              (click)="saveUser()"></button>
+    </ng-template>
+  </p-dialog>
+  
+  <p-confirmDialog />

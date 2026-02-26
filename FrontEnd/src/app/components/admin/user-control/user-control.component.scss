@@ -1,0 +1,62 @@
+.user-control-container {
+    padding: 1.5rem;
+    margin: 2rem 5rem 0 5rem;
+  }
+  .Actions {
+    width: 10rem;
+    text-align: center;
+  }
+  .centerTH {
+    text-align: center; 
+  }
+  .header {
+    margin-bottom: 1.5rem;
+  
+    h2 {
+      color: var(--p-text-color);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+  
+      i {
+        color: var(--p-primary-500);
+      }
+    }
+  }
+  
+  .category-row {
+    background-color: var(--p-surface-hover) !important;
+    font-weight: 600;
+  }
+  
+  .category-label {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--p-primary-700);
+  }
+  
+  .user-count {
+    color: var(--p-text-muted-color);
+    font-size: 0.85rem;
+    margin-left: 0.35rem;
+    font-weight: 400;
+  }
+  
+  .dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 0.5rem 0;
+  }
+  
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  
+    label {
+      font-weight: 500;
+      color: var(--p-text-color);
+    }
+  }
