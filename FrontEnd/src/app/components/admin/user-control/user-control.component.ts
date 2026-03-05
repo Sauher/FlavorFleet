@@ -13,6 +13,7 @@ import { TagModule } from 'primeng/tag';
 import { ApiService } from '../../../services/api.service';
 import { MessageService } from '../../../services/message.service';
 import { User } from '../../../interfaces/user';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-user-control',
@@ -35,6 +36,7 @@ import { User } from '../../../interfaces/user';
 export class UserControlComponent implements OnInit {
   userTree: TreeNode[] = [];
   users: User[] = [];
+  currentUser: User | null = null;
 
   editDialogVisible = false;
   selectedUser: User = { name: '', email: '', password: '' };
@@ -53,11 +55,17 @@ export class UserControlComponent implements OnInit {
   constructor(
     private api: ApiService,
     private msg: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.loadCurrentUser();
     this.loadUsers();
+  }
+
+  loadCurrentUser(): void {
+    this.currentUser = this.auth.loggedUser();
   }
 
   loadUsers(): void {
@@ -73,7 +81,7 @@ export class UserControlComponent implements OnInit {
   }
 
   buildTree(): void {
-    const admins = this.users.filter(u => u.role === 'admin' && u.status !== false);
+    const admins = this.users.filter(u => u.role === 'admin' && u.status !== false && u.id !== this.currentUser?.id);
     const owners = this.users.filter(u => u.role === 'owner' && u.status !== false);
     const regularUsers = this.users.filter(u => u.role === 'user' && u.status !== false);
     const inactive = this.users.filter(u => u.status === false);
@@ -111,6 +119,10 @@ export class UserControlComponent implements OnInit {
   }
 
   editUser(user: User): void {
+    if (user.id === this.currentUser?.id) {
+      this.msg.show('warn', 'Warning', 'You cannot edit your own account.');
+      return;
+    }
     this.selectedUser = { ...user };
     this.editDialogVisible = true;
   }
@@ -138,6 +150,10 @@ export class UserControlComponent implements OnInit {
   }
 
   deleteUser(event: Event, user: User): void {
+    if (user.id === this.currentUser?.id) {
+      this.msg.show('warn', 'Warning', 'You cannot delete your own account.');
+      return;
+    }
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message: `Are you sure you want to delete ${user.name}?`,
