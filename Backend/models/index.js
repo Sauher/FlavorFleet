@@ -1,8 +1,8 @@
 const { Op, Sequelize} = require("sequelize");
-
+ 
 const dbConfig = require("../config/database.js");
 const db = {};
-
+ 
 console.log(dbConfig);
 const sequelize = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.password, {
   host: dbConfig.host,
@@ -12,17 +12,18 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.passw
 });
 const User = require('./user.model.js')(sequelize);
 const Restaurant = require('./restaurant.model.js')(sequelize);
-
+const MenuItem = require('./menu-item.model.js')(sequelize);
+ 
 db.Restaurant = Restaurant;
 db.User = User;
-
-
+db.MenuItem = MenuItem;
+ 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
 });
-
+ 
 const operatorMap = {
     eq: Op.eq,
     lt: Op.lt,
@@ -32,5 +33,5 @@ const operatorMap = {
     like: Op.like,
     not: Op.not
 }
-
-module.exports = {sequelize, User, operatorMap};
+ 
+module.exports = {sequelize, User, MenuItem, Restaurant, operatorMap};
