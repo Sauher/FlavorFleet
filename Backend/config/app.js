@@ -6,7 +6,6 @@ const cors = require('cors')
 const userRoutes =  require('../routes/users.routes')
 const restaurantRoutes = require('../routes/restaurant.routes')
 const mailRoutes = require('../routes/mail.routes')
-const uploadRoutes = require('../routes/upload.routes')
 
 
 const app = express();
@@ -18,7 +17,6 @@ app.use(express.json());
 app.use('/restaurants', restaurantRoutes)
 app.use('/users', userRoutes)
 app.use('/mail', mailRoutes)
-app.use('/upload',uploadRoutes)
 
 app.use('/uploads', express.static('uploads'))
 
