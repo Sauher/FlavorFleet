@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -8,10 +8,15 @@ import { AvatarModule } from 'primeng/avatar';
 import { RatingModule } from 'primeng/rating';
 import { DividerModule } from 'primeng/divider';
 import { MessageService } from '../../../../services/message.service';
-
+import { UploaderModule } from "angular-uploader";
+import { Uploader, UploadWidgetConfig, UploadWidgetResult } from 'uploader';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { Router } from "@angular/router";
+import { User } from '../../../../interfaces/user';
+import { ApiService } from '../../../../services/api.service';
+import { AuthService } from '../../../../services/auth.service';
 
 interface FavoriteItem {
   id: number;
@@ -35,24 +40,28 @@ interface FavoriteItem {
     DialogModule,
     InputTextModule,
     PasswordModule,
-
-  ],
+    UploaderModule
+],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
-export class ProfileComponent {
-   constructor(private msg: MessageService) {}
-  user = {
-    name: 'Máté Horváth',
-    email: 'mate.horvath@email.com',
-    avatarUrl: 'https://i.pravatar.cc/160?img=12',
+export class ProfileComponent implements OnInit {
+   constructor(private msg: MessageService, private router: Router,private api: ApiService,private auth: AuthService) {}
+
+  ngOnInit(): void {
+    this.getUser();
+  }
+
+  goToOrders() {
+    this.router.navigate(['/orders']);
+  }
+
+  user: User = {
+    name: '',
+    email: '',
+    pictureURL:''
   };
 
-  personalCards = [
-    { title: 'Címek', subtitle: '6 Mentett cím', action: 'Megtekintés', icon: 'pi pi-map-marker' },
-    { title: 'Fizetési módok', subtitle: '3 Hozzáadott kártya', action: 'Megtekintés', icon: 'pi pi-credit-card' },
-    { title: 'Rendeléstörténet', subtitle: '32 Teljesített rendelés', action: 'Megtekintés', icon: 'pi pi-history' },
-  ];
 
   favorites: FavoriteItem[] = [
     {
@@ -92,25 +101,59 @@ export class ProfileComponent {
   openFavorite(item: FavoriteItem) {
     console.log('Open favorite:', item.name);
   }
+
+  getUser(){
+    this.api.readById('users', this.auth.loggedUser()?.id,true ).subscribe({
+      next: (res) => {
+        this.user = res as User;
+        console.log(this.user)
+      }
+    });
+  }
+
+  viewAddresses(){}
+
+
+  //File upload
+    uploadedFileUrl:string = ''
+
+    uploader = Uploader({
+    apiKey: 'free', 
+    });
+    options: UploadWidgetConfig = {
+      multi: false,
+    };
+    onComplete = (files: UploadWidgetResult[]) => {
+      this.uploadedFileUrl = files[0]?.fileUrl;
+      console.log(this.uploadedFileUrl)
+      this.editUser.pictureURL = this.uploadedFileUrl
+    };
  
 
 editProfileVisible = false;
 changePasswordVisible = false;
 
 /** form modellek (modalokhoz) */
-editModel = { name: '', email: '' };
+editUser : User = { name: '', email: '', pictureURL: '' };
 passwordModel = { password: '', confirm: '' };
 
 openEditProfile() {
-  this.editModel = { name: this.user.name, email: this.user.email };
+  this.editUser = { name: this.user.name, email: this.user.email, pictureURL: this.user.pictureURL };
   this.editProfileVisible = true;
 }
 
 saveProfile() {
-  this.user = { ...this.user, name: this.editModel.name.trim(), email: this.editModel.email.trim() };
+  this.user = { ...this.user, name: this.editUser.name.trim(), email: this.editUser.email.trim(), pictureURL: this.editUser.pictureURL?.trim() };
   this.editProfileVisible = false;
 
-  this.msg.show(  'success',  'Mentve', 'Név és email frissítve.' );
+  this.api.update('users', this.auth.loggedUser()?.id, this.editUser).subscribe({
+    next: () => {
+      this.msg.show(  'success',  'Mentve', 'Név, email és profilkép frissítve.' );
+    }
+    ,error: () => {
+      this.msg.show(  'error',  'Hiba', 'Név, email és profilkép frissítése sikertelen.' );
+    }
+  });
 }
 
 openChangePassword() {
@@ -132,8 +175,15 @@ savePassword() {
   }
 
   this.changePasswordVisible = false;
+  this.api.update('users', this.auth.loggedUser()?.id, { password: p }).subscribe({
+    next: () => {
+      this.msg.show('success',  'Siker',  'Jelszó módosítva.' );
+    },
+    error: () => {
+      this.msg.show('error',  'Hiba',  'Jelszó módosítása sikertelen.' );
+    }
+  });
   this.msg.show('success',  'Siker',  'Jelszó módosítva.' );
 
-  // TODO: backend hívás ide
 }
 }
