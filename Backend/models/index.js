@@ -13,11 +13,13 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.passw
 const User = require('./user.model.js')(sequelize);
 const Restaurant = require('./restaurant.model.js')(sequelize);
 const MenuItem = require('./menu-item.model.js')(sequelize);
+const Address = require('./address.model.js')(sequelize);
  
 db.Restaurant = Restaurant;
 db.User = User;
 db.MenuItem = MenuItem;
- 
+db.Address = Address;
+
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
@@ -34,4 +36,4 @@ const operatorMap = {
     not: Op.not
 }
  
-module.exports = {sequelize, User, MenuItem, Restaurant, operatorMap};
+module.exports = {sequelize, User, MenuItem, Restaurant, Address, operatorMap};

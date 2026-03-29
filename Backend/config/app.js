@@ -7,6 +7,7 @@ const userRoutes =  require('../routes/users.routes')
 const restaurantRoutes = require('../routes/restaurant.routes')
 const mailRoutes = require('../routes/mail.routes')
 const menuItemRoutes= require('../routes/menu-item.routes')
+const addressRoutes = require('../routes/address.routes')
 
 
 const app = express();
@@ -19,6 +20,7 @@ app.use('/restaurants', restaurantRoutes)
 app.use('/users', userRoutes)
 app.use('/mail', mailRoutes)
 app.use('/menuitems', menuItemRoutes)
+app.use('/addresses', addressRoutes)
 
 app.use('/uploads', express.static('uploads'))
 
