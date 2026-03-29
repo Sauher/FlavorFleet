@@ -203,3 +203,46 @@
   margin-bottom: 6px;
   font-size: 12px;
 }
+
+/* ── Address list modal ── */
+.address-list {
+  display: grid;
+  gap: 8px;
+}
+
+.address-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--p-surface-hover) 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--p-primary-500) 12%, transparent);
+}
+
+.address-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: var(--p-text-color);
+  word-break: break-word;
+}
+
+.address-text i {
+  color: color-mix(in srgb, var(--p-primary-500) 90%, transparent);
+  flex-shrink: 0;
+}
+
+.address-actions {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.empty-addresses {
+  text-align: center;
+  padding: 24px 0;
+  color: var(--p-text-muted-color);
+  font-weight: 600;
+}

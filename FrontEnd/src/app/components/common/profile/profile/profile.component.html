@@ -30,7 +30,7 @@
               <i class="pi pi-map-marker"></i>
               <span>Címek</span>
             </div>
-            <div class="row-sub">6 Mentett cím</div>
+            <div class="row-sub">{{ addresses.length }} Mentett cím</div>
           </div>
 
           <button
@@ -40,6 +40,8 @@
             (click)="viewAddresses()"
           ></button>
         </div>
+
+        <div class="row" *ngIf="addresses.length > 0" style="display:none"></div>
 
         <div class="row">
           <div class="left">
@@ -135,6 +137,63 @@
   </div>
 </p-dialog>
 
+
+<!-- ── Addresses list dialog ── -->
+<p-dialog
+  header="Mentett címek"
+  [(visible)]="addressesVisible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '520px', maxWidth: '95vw' }"
+>
+  <div class="dialog-form">
+    <div class="address-list" *ngIf="addresses.length > 0">
+      <div class="address-item" *ngFor="let addr of addresses">
+        <div class="address-text">
+          <i class="pi pi-map-marker"></i>
+          <span>{{ addr.useraddress }}</span>
+        </div>
+        <div class="address-actions">
+          <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm" (click)="openEditAddress(addr)"></button>
+          <button pButton icon="pi pi-trash" class="p-button-text p-button-danger p-button-sm" (click)="deleteAddress(addr)"></button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="addresses.length === 0" class="empty-addresses">
+      <i class="pi pi-map-marker" style="font-size: 2rem; opacity: 0.4"></i>
+      <p>Még nincs mentett cím.</p>
+    </div>
+
+    <div class="dialog-actions">
+      <button pButton label="Bezárás" class="p-button-outlined" (click)="addressesVisible=false"></button>
+      <button pButton label="Új cím" icon="pi pi-plus" (click)="openAddAddress()"></button>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- ── Add / Edit address dialog ── -->
+<p-dialog
+  [header]="editingAddressId ? 'Cím szerkesztése' : 'Új cím hozzáadása'"
+  [(visible)]="editAddressVisible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '420px', maxWidth: '95vw' }"
+>
+  <div class="dialog-form">
+    <div class="field">
+      <label>Cím</label>
+      <input pInputText class="w-full" [(ngModel)]="editAddressModel.useraddress" placeholder="Pl. 1234 Budapest, Fő utca 1." />
+    </div>
+
+    <div class="dialog-actions">
+      <button pButton label="Mégse" class="p-button-outlined" (click)="editAddressVisible=false"></button>
+      <button pButton label="Mentés" icon="pi pi-check" (click)="saveAddress()"></button>
+    </div>
+  </div>
+</p-dialog>
 
 <p-dialog
   header="Jelszó módosítása"

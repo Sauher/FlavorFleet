@@ -15,6 +15,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { Router } from "@angular/router";
 import { User } from '../../../../interfaces/user';
+import { Address } from '../../../../interfaces/address';
 import { ApiService } from '../../../../services/api.service';
 import { AuthService } from '../../../../services/auth.service';
 
@@ -111,7 +112,77 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  viewAddresses(){}
+  // ── Addresses ──
+  addresses: Address[] = [];
+  addressesVisible = false;
+  editAddressVisible = false;
+  editAddressModel: Address = { useraddress: '' };
+  editingAddressId: string | null = null;
+
+  viewAddresses() {
+    this.loadAddresses();
+    this.addressesVisible = true;
+  }
+
+  loadAddresses() {
+    const userId = this.auth.loggedUser()?.id;
+    if (!userId) return;
+    this.api.readByField('addresses', 'user_id', 'eq', userId, true).subscribe({
+      next: (res) => { this.addresses = res as Address[]; },
+      error: () => { this.msg.show('error', 'Hiba', 'Nem sikerült betölteni a címeket.'); }
+    });
+  }
+
+  openAddAddress() {
+    this.editingAddressId = null;
+    this.editAddressModel = { useraddress: '' };
+    this.editAddressVisible = true;
+  }
+
+  openEditAddress(addr: Address) {
+    this.editingAddressId = addr.id ?? null;
+    this.editAddressModel = { useraddress: addr.useraddress };
+    this.editAddressVisible = true;
+  }
+
+  saveAddress() {
+    const value = this.editAddressModel.useraddress.trim();
+    if (!value) {
+      this.msg.show('error', 'Hiba', 'A cím mező nem lehet üres.');
+      return;
+    }
+
+    if (this.editingAddressId) {
+      this.api.update('addresses', this.editingAddressId, { useraddress: value }).subscribe({
+        next: () => {
+          this.msg.show('success', 'Siker', 'Cím módosítva.');
+          this.editAddressVisible = false;
+          this.loadAddresses();
+        },
+        error: () => { this.msg.show('error', 'Hiba', 'Cím módosítása sikertelen.'); }
+      });
+    } else {
+      this.api.insert('addresses', { useraddress: value }, true).subscribe({
+        next: () => {
+          this.msg.show('success', 'Siker', 'Cím hozzáadva.');
+          this.editAddressVisible = false;
+          this.loadAddresses();
+        },
+        error: () => { this.msg.show('error', 'Hiba', 'Cím hozzáadása sikertelen.'); }
+      });
+    }
+  }
+
+  deleteAddress(addr: Address) {
+    if (!addr.id) return;
+    this.api.delete('addresses', addr.id).subscribe({
+      next: () => {
+        this.msg.show('success', 'Siker', 'Cím törölve.');
+        this.loadAddresses();
+      },
+      error: () => { this.msg.show('error', 'Hiba', 'Cím törlése sikertelen.'); }
+    });
+  }
 
 
   //File upload
