@@ -15,12 +15,7 @@ function generateToken(user){
 
 function verifyToken(token){
     const secret = ensureSecret();
-    try {
-        const decoded = jwt.verify(token, secret);
-        return decoded;
-    } catch (err) {
-        console.log(err);
-    }
+    return jwt.verify(token, secret);
 }
 
 function authenticate(req, res, next){
@@ -30,10 +25,13 @@ function authenticate(req, res, next){
     }
     try {
         const decoded = verifyToken(token);
+        if (!decoded?.id) {
+            return res.status(401).json({ message: "Invalid token payload" });
+        }
         req.user = decoded;
         next();
-    } catch (err) {
-        return res.status(401).json({ message: err.message });
+    } catch (_err) {
+        return res.status(401).json({ message: "Invalid or expired token" });
     }
 }
 

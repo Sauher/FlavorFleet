@@ -5,7 +5,7 @@ const {sequelize} = require('./models/index');
         await sequelize.authenticate();
         console.log('Database connection has been established successfully.');
 
-        sequelize.sync({alter : true});
+        await sequelize.sync({alter : true});
 
         app.listen(process.env.PORT, () => {
         
