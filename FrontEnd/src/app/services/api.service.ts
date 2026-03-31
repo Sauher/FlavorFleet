@@ -84,6 +84,17 @@ export class ApiService {
     return this.http.post(`${this.server}/${table}`, data);
   }
 
+  uploadRestaurantImages(restaurantId: string, files: File[]) {
+    const formData = new FormData();
+    files.forEach((file) => formData.append('images', file));
+
+    return this.http.post(
+      `${this.server}/restaurants/${restaurantId}/images`,
+      formData,
+      this.tokenHeader()
+    );
+  }
+
   update(table: string, id: string, data: object) {
     return this.http.patch(`${this.server}/${table}/${id}`, data, this.tokenHeader());
   }
@@ -101,4 +112,34 @@ export class ApiService {
   downloadFile() { }
 
   deleteFile() { }
+
+  // Menu Item endpoints
+  getMenuItemsByRestaurant(restaurantId: string) {
+    return this.http.get(`${this.server}/menuitems/restaurant/${restaurantId}`, this.tokenHeader());
+  }
+
+  createMenuItem(data: object) {
+    return this.http.post(`${this.server}/menuitems`, data, this.tokenHeader());
+  }
+
+  updateMenuItem(id: string, data: object) {
+    return this.http.patch(`${this.server}/menuitems/${id}`, data, this.tokenHeader());
+  }
+
+  toggleMenuItemAvailability(id: string) {
+    return this.http.patch(`${this.server}/menuitems/${id}/toggle-availability`, {}, this.tokenHeader());
+  }
+
+  deleteMenuItem(id: string) {
+    return this.http.delete(`${this.server}/menuitems/${id}`, this.tokenHeader());
+  }
+
+  uploadMenuItemImage(files: File[], restaurantId?: string) {
+    const formData = new FormData();
+    files.forEach((file) => formData.append('image', file));
+    if (restaurantId) {
+      formData.append('restaurant_id', restaurantId);
+    }
+    return this.http.post(`${this.server}/menuitems/upload/image`, formData, this.tokenHeader());
+  }
 }

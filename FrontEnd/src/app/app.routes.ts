@@ -26,6 +26,7 @@ export const routes: Routes = [
   // Owner routes
   { path: 'menu-management', component: MenuManagementComponent, canActivate: [ownerGuard] },
   { path: 'order-management', component: OrderManagementComponent, canActivate: [ownerGuard] },
+  { path: 'restaurant-management/:id', component: RestaurantManagementComponent, canActivate: [ownerGuard] },
   { path: 'restaurant-management', component: RestaurantManagementComponent, canActivate: [ownerGuard] },
 
   //Admin routes

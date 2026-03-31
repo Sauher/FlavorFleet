@@ -1,39 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { DropdownModule } from 'primeng/dropdown';
 import { ToggleButtonModule } from 'primeng/togglebutton';
-import { TagModule } from 'primeng/tag';
 import { DividerModule } from 'primeng/divider';
-import { TableModule } from 'primeng/table';
-import { AvatarModule } from 'primeng/avatar';
-import { MenubarModule } from 'primeng/menubar';
-import { TabViewModule } from 'primeng/tabview';
-import { ChartModule } from 'primeng/chart';
-import { TooltipModule } from 'primeng/tooltip';
 import { FileUploadModule } from 'primeng/fileupload';
-import { DialogModule } from 'primeng/dialog';
+import { InputTextarea } from 'primeng/inputtextarea';
+import { environment } from '../../../../environments/environment';
 
-type MenuCategory = 'Pizza' | 'Burger' | 'Sushi' | 'Ital' | 'Desszert';
+import { ApiService } from '../../../services/api.service';
+import { MessageService } from '../../../services/message.service';
+import { OpeningHoursEntry, Restaurant } from '../../../interfaces/restaurant';
 
-interface MenuItem {
-  id: number;
-  name: string;
-  category: MenuCategory;
-  priceFt: number;
-  imageUrl: string;
-  enabled: boolean;
-}
-
-interface DayHours {
-  day: string;
-  open: string; // "11:30"
-  close: string; // "23:00"
+interface EditorDayHours {
+  day: number;
+  label: string;
+  opening_time: string;
+  closing_time: string;
 }
 
 @Component({
@@ -42,252 +29,347 @@ interface DayHours {
   imports: [
     CommonModule,
     FormsModule,
-    MenubarModule,
     CardModule,
     ButtonModule,
     InputTextModule,
-    InputNumberModule,
-    DropdownModule,
     ToggleButtonModule,
-    TagModule,
     DividerModule,
-    TableModule,
-    AvatarModule,
-    TabViewModule,
-    ChartModule,
-    TooltipModule,
     FileUploadModule,
-    DialogModule,
+    InputTextarea
   ],
   templateUrl: './restaurant-management.component.html',
-  styleUrls: ['./restaurant-management.component.scss'],
+  styleUrls: ['./restaurant-management.component.scss']
 })
-export class RestaurantManagementComponent {
-  // top nav
-  activeTop = 'Kezelőpult';
+export class RestaurantManagementComponent implements OnInit {
+  private readonly dayLabels = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'];
+  private readonly serverUrl = environment.serverUrl.replace(/\/$/, '');
 
+  restaurants: Restaurant[] = [];
+  loadingList = false;
+  loadingEditor = false;
+  saving = false;
+  deletingRestaurantId: string | null = null;
+  currentRestaurantId: string | null = null;
+  creatingRestaurant = false;
 
-  restaurant = {
-    name: 'Pizza Palazzo',
-    rating: 4.7,
-    coverUrl:
-      'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1400&q=60',
-    logoUrl: 'https://i.pravatar.cc/80?img=12',
-    isOpen: true,
+  createModel = {
+    name: '',
+    description: '',
+    address: ''
   };
 
-  // tabs in the "restaurant" header area
-  headerTab: 'Menü' | 'Étterem' = 'Menü';
-
-  categoryOptions: { label: string; value: MenuCategory }[] = [
-    { label: 'Pizza', value: 'Pizza' },
-    { label: 'Burger', value: 'Burger' },
-    { label: 'Sushi', value: 'Sushi' },
-    { label: 'Ital', value: 'Ital' },
-    { label: 'Desszert', value: 'Desszert' },
-  ];
-
-  
-  newItem = {
-  name: '',
-  priceFt: 2290,
-  category: 'Pizza' as MenuCategory,
-  imageDataUrl: '' as string, 
-};
-
-  items: MenuItem[] = [
-    {
-      id: 1,
-      name: 'Margherita Pizza',
-      category: 'Pizza',
-      priceFt: 1990,
-      imageUrl:
-        'https://images.unsplash.com/photo-1601924582975-7e1a4f2b2e9b?auto=format&fit=crop&w=600&q=60',
-      enabled: true,
-    },
-    {
-      id: 2,
-      name: 'Pepperoni Pizza',
-      category: 'Pizza',
-      priceFt: 2290,
-      imageUrl:
-        'https://images.unsplash.com/photo-1542281286-9e0a16bb7366?auto=format&fit=crop&w=600&q=60',
-      enabled: true,
-    },
-    {
-      id: 3,
-      name: 'Prosciutto e Funghi',
-      category: 'Pizza',
-      priceFt: 2490,
-      imageUrl:
-        'https://images.unsplash.com/photo-1544982503-7fb06b5a5121?auto=format&fit=crop&w=600&q=60',
-      enabled: true,
-    },
-    {
-      id: 4,
-      name: 'Quattro Formaggi',
-      category: 'Pizza',
-      priceFt: 2590,
-      imageUrl:
-        'https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?auto=format&fit=crop&w=600&q=60',
-      enabled: false,
-    },
-  ];
-
- 
-  hours: DayHours[] = [
-    { day: 'Hétfő', open: '11:30', close: '23:00' },
-    { day: 'Kedd', open: '11:30', close: '23:00' },
-    { day: 'Szerda', open: '11:30', close: '23:00' },
-    { day: 'Csütörtök', open: '11:30', close: '23:00' },
-    { day: 'Péntek', open: '11:30', close: '24:00' },
-    { day: 'Szombat', open: '11:30', close: '24:00' },
-    { day: 'Vasárnap', open: '11:30', close: '24:00' },
-  ];
-
-
-  stats = {
-    todayOrders: 18,
-    weekRevenueFt: 727_250,
-    openOrders: 4,
+  editorModel = {
+    id: '',
+    name: '',
+    description: '',
+    address: '',
+    is_open: false,
+    opening_hours: [] as EditorDayHours[],
+    images: [] as string[]
   };
 
+  constructor(
+    private api: ApiService,
+    private message: MessageService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
-  chartData = {
-    labels: ['H', 'K', 'Sz', 'Cs', 'P', 'Szo', 'V'],
-    datasets: [
-      {
-        label: 'Rendelések',
-        data: [5, 8, 7, 9, 12, 10, 6],
+  ngOnInit(): void {
+    this.route.paramMap.subscribe((params) => {
+      this.currentRestaurantId = params.get('id');
+      this.creatingRestaurant = this.currentRestaurantId === 'new';
+
+      if (this.creatingRestaurant) {
+        this.resetCreateModel();
+      } else if (this.currentRestaurantId) {
+        this.loadRestaurantForEdit(this.currentRestaurantId);
+      } else {
+        this.loadOwnerRestaurants();
+      }
+    });
+  }
+
+  openCreateRestaurant(): void {
+    this.router.navigate(['/restaurant-management', 'new']);
+  }
+
+  openRestaurant(restaurant: Restaurant): void {
+    this.router.navigate(['/restaurant-management', restaurant.id]);
+  }
+
+  backToList(): void {
+    this.router.navigate(['/restaurant-management']);
+  }
+
+  deleteRestaurant(restaurant: Restaurant, event?: Event): void {
+    event?.stopPropagation();
+
+    if (!restaurant?.id) {
+      return;
+    }
+
+    if (!confirm(`Biztosan törlöd a(z) "${restaurant.name}" éttermet?`)) {
+      return;
+    }
+
+    this.deletingRestaurantId = restaurant.id;
+    this.api.delete('restaurants', restaurant.id).subscribe({
+      next: () => {
+        this.deletingRestaurantId = null;
+        this.restaurants = this.restaurants.filter((item) => item.id !== restaurant.id);
+        this.message.show('success', 'Törölve', `A(z) "${restaurant.name}" étterem törölve lett.`);
       },
-    ],
-  };
-
-  chartOptions = {
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: { enabled: true },
-    },
-    scales: {
-      x: { grid: { display: false } },
-      y: { grid: { display: true }, ticks: { precision: 0 } },
-    },
-  };
-
-  formatFt(v: number) {
-    return v.toLocaleString('hu-HU') + ' Ft';
+      error: (error) => {
+        this.deletingRestaurantId = null;
+        const errorMessage = this.resolveRestaurantError(error, 'Nem sikerült törölni az éttermet.');
+        this.message.show('error', 'Hiba', errorMessage);
+      }
+    });
   }
 
-  addItem() {
-    const name = this.newItem.name.trim();
-    if (!name) return;
+  saveRestaurant(): void {
+    if (!this.editorModel.id) {
+      return;
+    }
 
-    const nextId = Math.max(...this.items.map((x) => x.id), 0) + 1;
-    const imageUrl = this.newItem.imageDataUrl
-  ? this.newItem.imageDataUrl
-  : 'https://images.unsplash.com/photo-1601924582975-7e1a4f2b2e9b?auto=format&fit=crop&w=600&q=60';
-  this.newItem.name = '';
-this.newItem.imageDataUrl = '';
+    if (!this.editorModel.address.trim()) {
+      this.message.show('warn', 'Hiányzó cím', 'A cím megadása kötelező.');
+      return;
+    }
 
-    this.items = [
-      {
-        id: nextId,
-        name,
-        category: this.newItem.category,
-        priceFt: this.newItem.priceFt,
-        imageUrl,
-        enabled: true,
-      },
-      ...this.items,
-    ];
+    this.saving = true;
+    const openingHoursPayload: OpeningHoursEntry[] = this.editorModel.opening_hours.map((hour) => ({
+      day: hour.day,
+      opening_time: hour.opening_time || null,
+      closing_time: hour.closing_time || null
+    }));
 
-    this.newItem.name = '';
-  }
-
-  toggleEnabled(item: MenuItem) {
-    item.enabled = !item.enabled;
-  }
-
-  editItem(item: MenuItem) {
-    console.log('edit', item);
-  }
-
-  deleteItem(item: MenuItem) {
-    this.items = this.items.filter((x) => x.id !== item.id);
-  }
-  onPickImage(event: any) {
-  const file: File | undefined = event?.files?.[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    this.newItem.imageDataUrl = String(reader.result || '');
-  };
-  reader.readAsDataURL(file);
-}
-
-removePickedImage() {
-  this.newItem.imageDataUrl = '';
-}
-editVisible = false;
-editModel: {
-  id: number | null;
-  name: string;
-  priceFt: number;
-  category: MenuCategory;
-  imageDataUrl: string;
-} = {
-  id: null,
-  name: '',
-  priceFt: 0,
-  category: 'Pizza',
-  imageDataUrl: '',
-};
-
-openEdit(item: MenuItem) {
-  this.editModel = {
-    id: item.id,
-    name: item.name,
-    priceFt: item.priceFt,
-    category: item.category,
-    imageDataUrl: item.imageUrl,
-  };
-  this.editVisible = true;
-}
-
-saveEdit() {
-  if (this.editModel.id == null) return;
-  const name = this.editModel.name.trim();
-  if (!name) return;
-
-  this.items = this.items.map((it) =>
-    it.id === this.editModel.id
-      ? {
-          ...it,
-          name,
-          priceFt: this.editModel.priceFt,
-          category: this.editModel.category,
-          imageUrl: this.editModel.imageDataUrl || it.imageUrl,
+    this.api
+      .update('restaurants', this.editorModel.id, {
+        description: this.editorModel.description,
+        address: this.editorModel.address,
+        is_open: this.editorModel.is_open,
+        opening_hours: openingHoursPayload,
+        images: this.editorModel.images
+      })
+      .subscribe({
+        next: () => {
+          this.saving = false;
+          this.message.show('success', 'Mentve', 'Az étterem adatai frissítve lettek.');
+        },
+        error: (error) => {
+          this.saving = false;
+          const errorMessage = this.resolveRestaurantError(error, 'Nem sikerült menteni a módosításokat.');
+          this.message.show('error', 'Hiba', errorMessage);
         }
-      : it
-  );
+      });
+  }
 
-  this.editVisible = false;
-}
+  createRestaurant(): void {
+    const name = this.createModel.name.trim();
+    const address = this.createModel.address.trim();
 
-onPickEditImage(event: any) {
-  const file: File | undefined = event?.files?.[0];
-  if (!file) return;
+    if (!name) {
+      this.message.show('warn', 'Hiányzó név', 'A név megadása kötelező.');
+      return;
+    }
 
-  const reader = new FileReader();
-  reader.onload = () => {
-    this.editModel.imageDataUrl = String(reader.result || '');
-  };
-  reader.readAsDataURL(file);
-}
+    if (!address) {
+      this.message.show('warn', 'Hiányzó cím', 'A cím megadása kötelező.');
+      return;
+    }
 
-removeEditImage() {
-  this.editModel.imageDataUrl = '';
-}
+    this.saving = true;
+    this.api
+      .insert(
+        'restaurants',
+        {
+          name,
+          description: this.createModel.description.trim(),
+          address
+        },
+        true
+      )
+      .subscribe({
+        next: () => {
+          this.saving = false;
+          this.message.show('success', 'Sikeres létrehozás', 'Az étterem sikeresen létrejött.');
+          this.router.navigate(['/restaurant-management']);
+        },
+        error: (error) => {
+          this.saving = false;
+          const errorMessage = this.resolveRestaurantError(error, 'Nem sikerült létrehozni az éttermet.');
+          this.message.show('error', 'Hiba', errorMessage);
+        }
+      });
+  }
+
+  async onPickRestaurantImage(event: { files?: File[] }): Promise<void> {
+    const files = event.files ?? [];
+
+    if (!this.editorModel.id) {
+      this.message.show('warn', 'Előbb mentsd', 'Először hozd létre az éttermet, utána tudsz képet feltölteni.');
+      return;
+    }
+
+    for (const file of files) {
+      if (this.editorModel.images.length >= 2) {
+        this.message.show('warn', 'Maximum 2 kép', 'Egyszerre legfeljebb 2 képet tárolhatsz.');
+        break;
+      }
+
+      await this.uploadRestaurantImage(file);
+    }
+  }
+
+  removeRestaurantImage(index: number): void {
+    this.editorModel.images = this.editorModel.images.filter((_, imageIndex) => imageIndex !== index);
+  }
+
+  trackByDay(_index: number, item: EditorDayHours): number {
+    return item.day;
+  }
+
+  resolveImageUrl(imagePath: string): string {
+    if (!imagePath) {
+      return '';
+    }
+
+    if (imagePath.startsWith('data:')) {
+      return imagePath;
+    }
+
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+      try {
+        const parsed = new URL(imagePath);
+        if (parsed.pathname.startsWith('/uploads/')) {
+          return `${this.serverUrl}${parsed.pathname}`;
+        }
+      } catch {
+        return imagePath;
+      }
+
+      return imagePath;
+    }
+
+    if (imagePath.startsWith('/')) {
+      return `${this.serverUrl}${imagePath}`;
+    }
+
+    return `${this.serverUrl}/${imagePath}`;
+  }
+
+  private loadOwnerRestaurants(): void {
+    this.loadingList = true;
+    this.api.readAll('restaurants/owner/mine', true).subscribe({
+      next: (response) => {
+        this.loadingList = false;
+        const source = (response as Restaurant[]) ?? [];
+        this.restaurants = source.map((restaurant) => ({
+          ...restaurant,
+          images: this.normalizeImagesField((restaurant as any)?.images)
+        }));
+      },
+      error: () => {
+        this.loadingList = false;
+        this.message.show('error', 'Hiba', 'Nem sikerült betölteni az éttermeket.');
+      }
+    });
+  }
+
+  private loadRestaurantForEdit(id: string): void {
+    this.loadingEditor = true;
+    this.api.readById('restaurants/owner', id, true).subscribe({
+      next: (response) => {
+        this.loadingEditor = false;
+        const restaurant = response as Restaurant;
+        this.editorModel = {
+          id: restaurant.id,
+          name: restaurant.name,
+          description: restaurant.description ?? '',
+          address: restaurant.address,
+          is_open: restaurant.is_open,
+          opening_hours: this.mapOpeningHoursForEditor(restaurant.opening_hours),
+          images: this.normalizeImagesField((restaurant as any)?.images).slice(0, 2)
+        };
+      },
+      error: () => {
+        this.loadingEditor = false;
+        this.message.show('error', 'Hiba', 'Nem sikerült betölteni az étterem adatait.');
+        this.backToList();
+      }
+    });
+  }
+
+  private mapOpeningHoursForEditor(openingHours: OpeningHoursEntry[] | null | undefined): EditorDayHours[] {
+    const source = Array.isArray(openingHours) ? openingHours : [];
+
+    return this.dayLabels.map((label, day) => {
+      const current = source.find((entry) => entry.day === day);
+      return {
+        day,
+        label,
+        opening_time: current?.opening_time ?? '',
+        closing_time: current?.closing_time ?? ''
+      };
+    });
+  }
+
+  private uploadRestaurantImage(file: File): Promise<void> {
+    return new Promise((resolve) => {
+      this.api.uploadRestaurantImages(this.editorModel.id, [file]).subscribe({
+        next: (response: any) => {
+          const normalized = this.normalizeImagesField(response?.images).slice(0, 2);
+          this.editorModel.images = normalized;
+          resolve();
+        },
+        error: (error) => {
+          const errorMessage = this.resolveRestaurantError(error, 'Nem sikerült feltölteni a képet.');
+          this.message.show('error', 'Hiba', errorMessage);
+          resolve();
+        }
+      });
+    });
+  }
+
+  private resetCreateModel(): void {
+    this.createModel = {
+      name: '',
+      description: '',
+      address: ''
+    };
+  }
+
+  private resolveRestaurantError(error: any, fallbackMessage: string): string {
+    if (error?.status === 413) {
+      return 'A feltöltött kép túl nagy. Kérlek tölts fel kisebb méretű képet.';
+    }
+
+    return error?.error?.error || fallbackMessage;
+  }
+
+  private normalizeImagesField(images: unknown): string[] {
+    if (Array.isArray(images)) {
+      return images.filter((image): image is string => typeof image === 'string' && !!image);
+    }
+
+    if (typeof images === 'string') {
+      const trimmed = images.trim();
+      if (!trimmed) {
+        return [];
+      }
+
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed)) {
+          return parsed.filter((image): image is string => typeof image === 'string' && !!image);
+        }
+      } catch {
+        return [trimmed];
+      }
+    }
+
+    return [];
+  }
 }

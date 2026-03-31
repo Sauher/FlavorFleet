@@ -64,5 +64,13 @@ module.exports = (sequelize) => {
     }
   });
 
+  User.associate = (models) => {
+    User.hasMany(models.Restaurant, {
+      foreignKey: 'owner_id',
+      as: 'restaurants',
+      onDelete: 'CASCADE'
+    });
+  };
+
   return User;
 };

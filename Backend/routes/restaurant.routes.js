@@ -1,6 +1,124 @@
 const router = require("express").Router();
+const fs = require("fs");
+const path = require("path");
+const multer = require("multer");
 const {Restaurant, operatorMap} = require("../models/index");
 const {authenticate} = require("../middleware/auth_middleware");
+
+const TIME_REGEX = /^([01]\d|2[0-3]):([0-5]\d)$/;
+const IMAGE_DATA_URL_REGEX = /^data:image\/[a-zA-Z0-9.+-]+;base64,/;
+const IMAGE_PATH_REGEX = /^(\/uploads\/|https?:\/\/)/i;
+
+const restaurantUploadsDir = path.join(process.cwd(), "uploads", "restaurants");
+if (!fs.existsSync(restaurantUploadsDir)) {
+  fs.mkdirSync(restaurantUploadsDir, { recursive: true });
+}
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (_req, _file, cb) => cb(null, restaurantUploadsDir),
+    filename: (_req, file, cb) => {
+      const safeExt = path.extname(file.originalname || "").toLowerCase() || ".jpg";
+      const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${safeExt}`;
+      cb(null, uniqueName);
+    }
+  }),
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype?.startsWith("image/")) {
+      return cb(null, true);
+    }
+    return cb(new Error("Csak képfájl tölthető fel"));
+  },
+  limits: {
+    fileSize: 20 * 1024 * 1024
+  }
+});
+
+function normalizeOpeningHours(openingHours) {
+  if (!Array.isArray(openingHours) || openingHours.length !== 7) {
+    throw new Error("A nyitvatartásnak 7 napot kell tartalmaznia (0-6)");
+  }
+
+  const normalized = openingHours.map((entry) => {
+    const day = Number(entry?.day);
+    const openingTime = entry?.opening_time ?? null;
+    const closingTime = entry?.closing_time ?? null;
+
+    if (!Number.isInteger(day) || day < 0 || day > 6) {
+      throw new Error("Minden naphoz 0-6 közötti day érték szükséges");
+    }
+
+    const hasOnlyOneTime = (openingTime && !closingTime) || (!openingTime && closingTime);
+    if (hasOnlyOneTime) {
+      throw new Error("A nyitási és zárási időt együtt kell megadni");
+    }
+
+    if (openingTime && !TIME_REGEX.test(openingTime)) {
+      throw new Error("Érvénytelen nyitási idő formátum, elvárt: HH:mm");
+    }
+
+    if (closingTime && !TIME_REGEX.test(closingTime)) {
+      throw new Error("Érvénytelen zárási idő formátum, elvárt: HH:mm");
+    }
+
+    return {
+      day,
+      opening_time: openingTime,
+      closing_time: closingTime
+    };
+  });
+
+  const uniqueDays = new Set(normalized.map((entry) => entry.day));
+  if (uniqueDays.size !== 7) {
+    throw new Error("A nyitvatartásban minden napnak egyszer kell szerepelnie (0-6)");
+  }
+
+  return normalized.sort((a, b) => a.day - b.day);
+}
+
+function normalizeImages(images) {
+  if (images === undefined) {
+    return undefined;
+  }
+
+  if (!Array.isArray(images)) {
+    throw new Error("A képek mező tömb kell legyen");
+  }
+
+  const normalizedImages = images
+    .filter((image) => typeof image === "string")
+    .map((image) => image.trim())
+    .filter((image) => image.length > 0);
+
+  if (normalizedImages.length > 2) {
+    throw new Error("Maximum 2 kép tölthető fel");
+  }
+
+  for (const image of normalizedImages) {
+    const isDataUrl = IMAGE_DATA_URL_REGEX.test(image);
+    const isImagePath = IMAGE_PATH_REGEX.test(image);
+    if (!isDataUrl && !isImagePath) {
+      throw new Error("A képek csak Base64 data URL vagy /uploads elérési út formátumban lehetnek");
+    }
+  }
+
+  return normalizedImages;
+}
+
+function validateCreatePayload(payload) {
+  const name = typeof payload?.name === "string" ? payload.name.trim() : "";
+  const address = typeof payload?.address === "string" ? payload.address.trim() : "";
+
+  if (!name) {
+    throw new Error("A név megadása kötelező");
+  }
+
+  if (!address) {
+    throw new Error("A cím megadása kötelező");
+  }
+
+  return { name, address };
+}
 
 // Get all restaurants
 router.get("/", async (_req, res) => {
@@ -9,6 +127,40 @@ router.get("/", async (_req, res) => {
     res.json(restaurants);
   } catch (error) {
     res.status(500).json({ error: "Nem sikerült lekérdezni az éttermeket" });
+  }
+});
+
+// Get all restaurants for authenticated owner
+router.get("/owner/mine", authenticate, async (req, res) => {
+  try {
+    const restaurants = await Restaurant.findAll({
+      where: { owner_id: req.user.id },
+      order: [["createdAt", "DESC"]]
+    });
+
+    res.json(restaurants);
+  } catch (error) {
+    res.status(500).json({ error: "Nem sikerült lekérdezni a saját éttermeket" });
+  }
+});
+
+// Get owner restaurant by UUID
+router.get("/owner/:id", authenticate, async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findOne({
+      where: {
+        id: req.params.id,
+        owner_id: req.user.id
+      }
+    });
+
+    if (!restaurant) {
+      return res.status(404).json({ error: "Nem található ilyen étterem" });
+    }
+
+    res.json(restaurant);
+  } catch (error) {
+    res.status(500).json({ error: "Nem sikerült lekérdezni az éttermet" });
   }
 });
 
@@ -28,17 +180,74 @@ router.get("/:id", async (req, res) => {
 // Create a new restaurant
 router.post("/", authenticate, async (req, res) => {
   try {
-    const { name, description, address, phone } = req.body;
+    const { name, address } = validateCreatePayload(req.body);
+
+    const {
+      description,
+      image_url,
+      phone,
+      is_active,
+      is_open,
+      opening_hours,
+      images
+    } = req.body;
+
+    const normalizedOpeningHours = opening_hours
+      ? normalizeOpeningHours(opening_hours)
+      : undefined;
+    const normalizedImages = normalizeImages(images);
+
     const newRestaurant = await Restaurant.create({
       owner_id: req.user.id,
       name,
       description,
       address,
-      phone
+      image_url,
+      phone,
+      is_active,
+      is_open,
+      opening_hours: normalizedOpeningHours,
+      images: normalizedImages
     });
+
     res.status(201).json(newRestaurant);
   } catch (error) {
-    res.status(500).json({ error: "Nem sikerült létrehozni az éttermet" });
+    res.status(400).json({ error: error.message || "Nem sikerült létrehozni az éttermet" });
+  }
+});
+
+// Upload restaurant images to local storage
+router.post("/:id/images", authenticate, upload.array("images", 2), async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findByPk(req.params.id);
+    if (!restaurant) {
+      return res.status(404).json({ error: "Nem található ilyen étterem" });
+    }
+
+    if (restaurant.owner_id !== req.user.id) {
+      return res.status(403).json({ error: "Nincs jogosultságod képet feltölteni ehhez az étteremhez" });
+    }
+
+    const uploadedFiles = Array.isArray(req.files) ? req.files : [];
+    if (uploadedFiles.length === 0) {
+      return res.status(400).json({ error: "Nincs feltöltött kép" });
+    }
+
+    const uploadedImagePaths = uploadedFiles.map((file) => `/uploads/restaurants/${file.filename}`);
+    const existingImages = Array.isArray(restaurant.images) ? restaurant.images : [];
+    const mergedImages = [...existingImages, ...uploadedImagePaths].slice(0, 2);
+
+    await restaurant.update({
+      images: mergedImages,
+      image_url: mergedImages[0] || null
+    });
+
+    return res.status(201).json({
+      images: mergedImages,
+      image_url: mergedImages[0] || null
+    });
+  } catch (error) {
+    return res.status(400).json({ error: error.message || "Nem sikerült feltölteni a képet" });
   }
 });
 // Update restaurant details
@@ -51,11 +260,36 @@ router.patch("/:id", authenticate, async (req, res) => {
         if (restaurant.owner_id !== req.user.id) {
             return res.status(403).json({ error: "Nincs jogosultságod módosítani ezt az éttermet" });
         }
-        const { name, description, address, phone, is_active } = req.body;
-        await restaurant.update({ name, description, address, phone, is_active });
+        const { name, description, address, image_url, phone, is_active, is_open, opening_hours, images } = req.body;
+
+        const updates = {};
+
+        if (name !== undefined) updates.name = String(name).trim();
+        if (description !== undefined) updates.description = description;
+        if (address !== undefined) updates.address = String(address).trim();
+        if (image_url !== undefined) updates.image_url = image_url;
+        if (phone !== undefined) updates.phone = phone;
+        if (is_active !== undefined) updates.is_active = is_active;
+        if (is_open !== undefined) updates.is_open = is_open;
+        if (opening_hours !== undefined) updates.opening_hours = normalizeOpeningHours(opening_hours);
+
+        if (updates.name !== undefined && !updates.name) {
+          return res.status(400).json({ error: "A név megadása kötelező" });
+        }
+
+        if (updates.address !== undefined && !updates.address) {
+          return res.status(400).json({ error: "A cím megadása kötelező" });
+        }
+
+        const normalizedImages = normalizeImages(images);
+        if (normalizedImages !== undefined) {
+          updates.images = normalizedImages;
+        }
+
+        await restaurant.update(updates);
         res.json(restaurant);
     } catch (error) {
-        res.status(500).json({ error: "Nem sikerült módosítani az éttermet" });
+        res.status(400).json({ error: error.message || "Nem sikerült módosítani az éttermet" });
     }
 });
 // Delete a restaurant
