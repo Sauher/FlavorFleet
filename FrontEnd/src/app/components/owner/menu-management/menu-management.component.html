@@ -1,1 +1,230 @@
-<p>menu-management works!</p>
+<div class="menu-management-page">
+  <section class="hero-card">
+    <div class="hero-title">Étlap kezelése</div>
+    <div class="hero-sub">Választott étterem étel listájának szerkesztése és karbantartása.</div>
+  </section>
+
+  <div class="loading" *ngIf="loadingRestaurants">Étteremek betöltése...</div>
+
+  <ng-container *ngIf="!loadingRestaurants && restaurants.length > 0">
+    <section class="restaurant-selector-section">
+      <p-card styleClass="selector-card">
+        <div class="selector-title">Étterem választása</div>
+        <p-dropdown
+          [options]="restaurants"
+          [(ngModel)]="selectedRestaurant"
+          optionLabel="name"
+          placeholder="Válassz éttermet"
+          styleClass="w-full"
+          (onChange)="onRestaurantSelect()"
+        ></p-dropdown>
+      </p-card>
+    </section>
+
+    <section *ngIf="selectedRestaurant" class="forms-section">
+      <!-- Add Menu Item Form -->
+      <p-card styleClass="main-card form-card">
+        <div class="card-title">Új étel hozzáadása</div>
+        <div class="card-sub">Tölts ki az adatokat, hogy új ételt adhass az étlaphoz.</div>
+
+        <div class="form-grid">
+          <div class="form-left">
+            <div class="field">
+              <label>Étel neve *</label>
+              <input pInputText class="w-full" [(ngModel)]="newMenuItemForm.name" placeholder="pl. Margherita Pizza" />
+            </div>
+
+            <div class="field">
+              <label>Leírás (összetevők)</label>
+              <textarea
+                pInputTextarea
+                rows="4"
+                class="w-full"
+                [(ngModel)]="newMenuItemForm.description"
+                placeholder="Pl. Paradicsom, mozzarella, bazilika, olívaolaj"
+              ></textarea>
+            </div>
+
+            <div class="field">
+              <label>Ár (Ft) *</label>
+              <p-inputNumber
+                [(ngModel)]="newMenuItemForm.price"
+                [min]="0"
+                [max]="99999"
+                locale="hu-HU"
+                styleClass="w-full"
+                placeholder="0"
+              ></p-inputNumber>
+            </div>
+          </div>
+
+          <div class="form-right">
+            <div class="image-section">
+              <div class="image-title">Kép feltöltése</div>
+              <div class="image-preview" *ngIf="newMenuItemForm.imagePreview; else noPreview">
+                <img [src]="resolveImageUrl(newMenuItemForm.imagePreview)" alt="Előnézet" />
+                <button pButton class="icon-only p-button-rounded p-button-text remove-img" icon="pi pi-times" (click)="removeImage()"></button>
+              </div>
+              <ng-template #noPreview>
+                <div class="image-preview empty">
+                  <i class="pi pi-image"></i>
+                  <span>Nincs kép</span>
+                </div>
+              </ng-template>
+
+              <p-fileUpload
+                mode="basic"
+                chooseLabel="Kép választása"
+                accept="image/*"
+                [auto]="true"
+                [customUpload]="true"
+                (uploadHandler)="onImageSelect($event)"
+                styleClass="upload-basic"
+              ></p-fileUpload>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button pButton icon="pi pi-plus" label="Étel hozzáadása" [loading]="savingMenuItem" (click)="addMenuItem()" class="btn-add"></button>
+        </div>
+      </p-card>
+
+      <!-- Menu Items List -->
+      <p-card styleClass="main-card list-card">
+        <div class="card-title">Étlap {{ selectedRestaurant && selectedRestaurant.name ? '- ' + selectedRestaurant.name : '' }}</div>
+        <div class="card-sub">{{ menuItems.length }} étel</div>
+
+        <div class="items-list" *ngIf="filteredMenuItems.length > 0">
+          <div class="item-row" *ngFor="let item of filteredMenuItems">
+            <div class="item-thumbnail">
+              <img [src]="resolveImageUrl(item.imageURL)" [alt]="item.name" />
+            </div>
+
+            <div class="item-content">
+              <div class="item-header">
+                <div class="item-name">{{ item.name }}</div>
+                <div class="item-price">{{ formatPrice(item.price) }}</div>
+              </div>
+              <div class="item-description">{{ item.description }}</div>
+              <div class="item-tags">
+                <p-tag
+                  [value]="item.is_available ? 'Elérhető' : 'Nem elérhető'"
+                  [severity]="item.is_available ? 'success' : 'warn'"
+                ></p-tag>
+              </div>
+            </div>
+
+            <div class="item-actions">
+              <button
+                pButton
+                class="p-button-text action-btn"
+                [icon]="item.is_available ? 'pi pi-eye' : 'pi pi-eye-slash'"
+                (click)="toggleMenuItemAvailability(item)"
+                [pTooltip]="item.is_available ? 'Rejt' : 'Mutat'"
+                pPositionLabel="top"
+              ></button>
+              <button pButton class="p-button-text action-btn" icon="pi pi-pencil" (click)="openEditDialog(item)" pTooltip="Szerkesztés" pPositionLabel="top"></button>
+              <button pButton class="p-button-text action-btn danger" icon="pi pi-trash" (click)="deleteMenuItem(item, 0)" pTooltip="Törlés" pPositionLabel="top"></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="empty" *ngIf="menuItems.length === 0">
+          Még nincs étel az étlapban. Adj hozzá egyet!
+        </div>
+
+        <p-paginator
+          *ngIf="totalItems > itemsPerPage"
+          [rows]="itemsPerPage"
+          [totalRecords]="totalItems"
+          [pageLinkSize]="5"
+          [rowsPerPageOptions]="[5, 10, 20]"
+          (onPageChange)="onPageChange($event)"
+          responsiveOptions="[{'breakpoint':'1024px','rows':10},{'breakpoint':'640px','rows':5}]"
+          styleClass="pagination"
+        ></p-paginator>
+      </p-card>
+    </section>
+
+    <!-- Edit Menu Item Dialog -->
+    <p-dialog
+      [(visible)]="editDialogVisible"
+      [header]="'Étel szerkesztése'"
+      [modal]="true"
+      [closeOnEscape]="true"
+      [styleClass]="'edit-dialog'"
+    >
+      <div class="edit-form" *ngIf="editingItem">
+        <div class="form-grid">
+          <div class="form-left">
+            <div class="field">
+              <label>Étel neve *</label>
+              <input pInputText class="w-full" [(ngModel)]="editMenuItemForm.name" placeholder="Étel jellegzetes neve" />
+            </div>
+
+            <div class="field">
+              <label>Leírás (összetevők)</label>
+              <textarea
+                pInputTextarea
+                rows="4"
+                class="w-full"
+                [(ngModel)]="editMenuItemForm.description"
+                placeholder="Pl. Paradicsom, mozzarella, bazilika, olívaolaj"
+              ></textarea>
+            </div>
+
+            <div class="field">
+              <label>Ár (Ft) *</label>
+              <p-inputNumber
+                [(ngModel)]="editMenuItemForm.price"
+                [min]="0"
+                [max]="99999"
+                locale="hu-HU"
+                styleClass="w-full"
+                placeholder="0"
+              ></p-inputNumber>
+            </div>
+          </div>
+
+          <div class="form-right">
+            <div class="image-section">
+              <div class="image-title">Kép feltöltése</div>
+              <div class="image-preview" *ngIf="editMenuItemForm.imagePreview; else noEditPreview">
+                <img [src]="resolveImageUrl(editMenuItemForm.imagePreview)" alt="Előnézet" />
+                <button pButton class="icon-only p-button-rounded p-button-text remove-img" icon="pi pi-times" (click)="removeEditImage()"></button>
+              </div>
+              <ng-template #noEditPreview>
+                <div class="image-preview empty">
+                  <i class="pi pi-image"></i>
+                  <span>Nincs kép</span>
+                </div>
+              </ng-template>
+
+              <p-fileUpload
+                mode="basic"
+                chooseLabel="Kép választása"
+                accept="image/*"
+                [auto]="true"
+                [customUpload]="true"
+                (uploadHandler)="onEditImageSelect($event)"
+                styleClass="upload-basic"
+              ></p-fileUpload>
+            </div>
+          </div>
+        </div>
+
+        <div class="edit-form-actions">
+          <button pButton label="Mentés" icon="pi pi-check" (click)="saveEditedMenuItem()" class="btn-save"></button>
+          <button pButton label="Mégse" icon="pi pi-times" (click)="cancelEdit()" class="btn-cancel p-button-text"></button>
+        </div>
+      </div>
+    </p-dialog>
+
+  </ng-container>
+
+  <div class="empty" *ngIf="!loadingRestaurants && restaurants.length === 0">
+    Még nincs éttermed. Hozz létre egyet a Restaurant Management oldalon.
+  </div>
+</div>
+

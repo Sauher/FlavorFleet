@@ -6,7 +6,7 @@ module.exports = (sequelize) => {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
-        defaultValue: DataTypes.UUIDV4
+      defaultValue: DataTypes.UUIDV4
     },
     restaurant_id: {
       type: DataTypes.UUID,
@@ -18,7 +18,7 @@ module.exports = (sequelize) => {
     },
     description: {
       type: DataTypes.TEXT,
-        allowNull: true
+      allowNull: true
     },
     price: {
       type: DataTypes.INTEGER,
@@ -33,14 +33,20 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING(255),
       allowNull: true
     }
-  }
-  ,{
+  },
+  {
     timestamps: true,
     defaultScope: {
-        attributes: { exclude: ["createdAt", "updatedAt"] }
+      attributes: { exclude: ["createdAt", "updatedAt"] }
     }
- 
- 
-  })
+  });
+
+  MenuItem.associate = (models) => {
+    MenuItem.belongsTo(models.Restaurant, {
+      foreignKey: 'restaurant_id',
+      as: 'restaurant'
+    });
+  };
+
   return MenuItem;
 }
