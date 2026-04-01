@@ -127,7 +127,6 @@
               [(ngModel)]="editorModel.is_open"
               onLabel="Nyitva"
               offLabel="Zárva"
-              onIcon="pi pi-check"
               offIcon="pi pi-times"
               styleClass="open-toggle"
             ></p-toggleButton>
@@ -165,16 +164,15 @@
             </div>
           </div>
 
-          <p-fileUpload
-            mode="basic"
-            chooseLabel="Kép feltöltése"
-            accept="image/*"
-            [auto]="true"
-            [multiple]="true"
-            [customUpload]="true"
-            (uploadHandler)="onPickRestaurantImage($event)"
+          <p-button
+            uploadButton
+            [uploadComplete]="onUploadComplete"
+            [uploadOptions]="uploaderOptions"
+            [uploader]="uploader"
+            label="Kép feltöltése"
+            icon="pi pi-upload"
             styleClass="upload-basic"
-          ></p-fileUpload>
+          ></p-button>
         </div>
       </div>
       </ng-template>

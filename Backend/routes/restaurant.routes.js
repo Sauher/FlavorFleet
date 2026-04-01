@@ -1,38 +1,10 @@
 const router = require("express").Router();
-const fs = require("fs");
-const path = require("path");
-const multer = require("multer");
 const {Restaurant, operatorMap} = require("../models/index");
 const {authenticate} = require("../middleware/auth_middleware");
 
 const TIME_REGEX = /^([01]\d|2[0-3]):([0-5]\d)$/;
 const IMAGE_DATA_URL_REGEX = /^data:image\/[a-zA-Z0-9.+-]+;base64,/;
 const IMAGE_PATH_REGEX = /^(\/uploads\/|https?:\/\/)/i;
-
-const restaurantUploadsDir = path.join(process.cwd(), "uploads", "restaurants");
-if (!fs.existsSync(restaurantUploadsDir)) {
-  fs.mkdirSync(restaurantUploadsDir, { recursive: true });
-}
-
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: (_req, _file, cb) => cb(null, restaurantUploadsDir),
-    filename: (_req, file, cb) => {
-      const safeExt = path.extname(file.originalname || "").toLowerCase() || ".jpg";
-      const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${safeExt}`;
-      cb(null, uniqueName);
-    }
-  }),
-  fileFilter: (_req, file, cb) => {
-    if (file.mimetype?.startsWith("image/")) {
-      return cb(null, true);
-    }
-    return cb(new Error("Csak képfájl tölthető fel"));
-  },
-  limits: {
-    fileSize: 20 * 1024 * 1024
-  }
-});
 
 function normalizeOpeningHours(openingHours) {
   if (!Array.isArray(openingHours) || openingHours.length !== 7) {
@@ -216,40 +188,6 @@ router.post("/", authenticate, async (req, res) => {
   }
 });
 
-// Upload restaurant images to local storage
-router.post("/:id/images", authenticate, upload.array("images", 2), async (req, res) => {
-  try {
-    const restaurant = await Restaurant.findByPk(req.params.id);
-    if (!restaurant) {
-      return res.status(404).json({ error: "Nem található ilyen étterem" });
-    }
-
-    if (restaurant.owner_id !== req.user.id) {
-      return res.status(403).json({ error: "Nincs jogosultságod képet feltölteni ehhez az étteremhez" });
-    }
-
-    const uploadedFiles = Array.isArray(req.files) ? req.files : [];
-    if (uploadedFiles.length === 0) {
-      return res.status(400).json({ error: "Nincs feltöltött kép" });
-    }
-
-    const uploadedImagePaths = uploadedFiles.map((file) => `/uploads/restaurants/${file.filename}`);
-    const existingImages = Array.isArray(restaurant.images) ? restaurant.images : [];
-    const mergedImages = [...existingImages, ...uploadedImagePaths].slice(0, 2);
-
-    await restaurant.update({
-      images: mergedImages,
-      image_url: mergedImages[0] || null
-    });
-
-    return res.status(201).json({
-      images: mergedImages,
-      image_url: mergedImages[0] || null
-    });
-  } catch (error) {
-    return res.status(400).json({ error: error.message || "Nem sikerült feltölteni a képet" });
-  }
-});
 // Update restaurant details
 router.patch("/:id", authenticate, async (req, res) => {
     try {
