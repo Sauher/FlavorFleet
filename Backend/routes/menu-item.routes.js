@@ -99,25 +99,32 @@ router.get("/", async (_req, res) => {
   }
 });
 
-// Get menu items for a specific restaurant
-router.get("/restaurant/:restaurantId", authenticate, async (req, res) => {
+// Get menu items for a specific restaurant (public)
+router.get("/restaurant/:restaurantId", async (req, res) => {
   try {
-    const restaurant = await Restaurant.findByPk(req.params.restaurantId);
+    const { restaurantId } = req.params;
+    
+    // DEBUG: Log the restaurant ID being queried
+    console.log(`[MenuItems] Fetching items for restaurant ID: ${restaurantId}`);
+
+    const restaurant = await Restaurant.findByPk(restaurantId);
 
     if (!restaurant) {
+      console.log(`[MenuItems] Restaurant not found for ID: ${restaurantId}`);
       return res.status(404).json({ error: "Nem található az étterem" });
     }
 
-    if (restaurant.owner_id !== req.user.id) {
-      return res.status(403).json({ error: "Nincs jogosultságod megtekinteni ennek az étteremnek az étlapját" });
-    }
-
     const menuItems = await MenuItem.findAll({
-      where: { restaurant_id: req.params.restaurantId },
+      where: { restaurant_id: restaurantId },
       order: [["createdAt", "DESC"]]
     });
-    res.json(menuItems);
+
+    // DEBUG: Log the number of items found
+    console.log(`[MenuItems] Found ${menuItems.length} items for restaurant ${restaurantId}`);
+    
+    res.json({ data: menuItems });
   } catch (error) {
+    console.error(`[MenuItems] Error fetching menu items:`, error);
     res.status(500).json({ error: "Nem sikerült lekérdezni az ételt" });
   }
 });

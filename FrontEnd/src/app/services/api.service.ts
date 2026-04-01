@@ -108,7 +108,8 @@ export class ApiService {
 
   // Menu Item endpoints
   getMenuItemsByRestaurant(restaurantId: string) {
-    return this.http.get(`${this.server}/menuitems/restaurant/${restaurantId}`, this.tokenHeader());
+    console.log(`[ApiService] Fetching menu items for restaurant: ${restaurantId}`);
+    return this.http.get(`${this.server}/menuitems/restaurant/${restaurantId}`);
   }
 
   createMenuItem(data: object) {

@@ -56,7 +56,7 @@
             </div>
 
             <div class="rest-actions">
-              <button pButton class="btn-open" icon="pi pi-arrow-right" label="Megnyitás" (click)="openRestaurant(r)"></button>
+              <button pButton class="btn-open" icon="pi pi-arrow-right" label="Megnyitás" (click)="openRestaurantMenu(r)"></button>
             </div>
           </div>
         </p-card>
@@ -67,4 +67,12 @@
       Nincs találat. Próbáld más kereséssel vagy szűrőkkel.
     </div>
   </section>
+
+  <!-- Menu Modal -->
+  <app-menu-modal
+    [visible]="menuModalVisible"
+    [restaurantId]="selectedRestaurantId"
+    [restaurantName]="selectedRestaurantName"
+    (onVisibleChange)="onMenuModalClose($event)"
+  ></app-menu-modal>
 </div>

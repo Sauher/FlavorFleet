@@ -9,6 +9,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { TagModule } from 'primeng/tag';
 import { DividerModule } from 'primeng/divider';
 import { ApiService } from '../../../../services/api.service';
+import { MenuModalComponent } from '../menu-modal/menu-modal.component';
 
 type FoodType = 'Pizza' | 'Burger' | 'Sushi' | 'Saláta' | 'Desszert' | 'Mexikói';
 
@@ -32,6 +33,7 @@ interface Restaurant {
     MultiSelectModule,
     TagModule,
     DividerModule,
+    MenuModalComponent,
   ],
   templateUrl: './restaurants.component.html',
   styleUrls: ['./restaurants.component.scss'],
@@ -41,6 +43,11 @@ export class RestaurantsComponent implements OnInit {
 
   query = '';
   selectedTypes: FoodType[] = [];
+  
+  // Menu Modal state
+  menuModalVisible = false;
+  selectedRestaurantId: string = '';
+  selectedRestaurantName: string = '';
 
   ngOnInit() {
     this.getRestaurants();
@@ -80,9 +87,22 @@ export class RestaurantsComponent implements OnInit {
     });
   }
 
-  openRestaurant(r: Restaurant) {
-    // TODO: navigálás pl. /etterem/:id
-    console.log('Open restaurant:', r);
+  /**
+   * Open restaurant menu modal
+   */
+  openRestaurantMenu(r: Restaurant) {
+    console.log(`[RestaurantsComponent] Opening menu for restaurant:`, r);
+    this.selectedRestaurantId = String(r.id);
+    this.selectedRestaurantName = r.name;
+    console.log(`[RestaurantsComponent] Set restaurantId to: ${this.selectedRestaurantId}`);
+    this.menuModalVisible = true;
+  }
+
+  /**
+   * Handle menu modal close
+   */
+  onMenuModalClose(visible: boolean) {
+    this.menuModalVisible = visible;
   }
 
   typeSeverity(t: FoodType): 'info' | 'success' | 'warn' | 'danger' | 'secondary' {
