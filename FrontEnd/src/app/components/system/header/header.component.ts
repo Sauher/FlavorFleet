@@ -120,7 +120,7 @@ constructor(
               },
               {
                 label: 'Éttermek kezelése',
-                routerLink: '/restaurant-admin-management'
+                routerLink: '/admin-restaurants'
               },
               {
                 label: 'Rendelések kezelése',

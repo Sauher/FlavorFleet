@@ -1,0 +1,729 @@
+.admin-restaurant-management {
+  padding: 1.5rem;
+  margin: 2rem 5rem 0 5rem;
+
+  .header {
+    margin-bottom: 1.5rem;
+
+    h2 {
+      color: var(--p-text-color);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      i {
+        color: var(--p-primary-500);
+      }
+    }
+
+    p {
+      color: var(--p-text-muted-color);
+      font-size: 0.95rem;
+      margin: 0.5rem 0 0 0;
+    }
+  }
+
+  .search-section {
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+
+    :deep(.p-iconfield) {
+      flex: 0 0 auto;
+      min-width: 280px;
+      max-width: 450px;
+
+      input {
+        width: 100%;
+        padding: 0.7rem 0.875rem;
+        border-radius: 6px;
+        border: 1px solid var(--p-field-border-color);
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+
+        &:focus {
+          border-color: var(--p-primary-500);
+          box-shadow: 0 0 0 0.2rem var(--p-primary-500, rgba(13, 110, 253, 0.25));
+        }
+      }
+
+      .p-input-icon-left > i {
+        color: var(--p-text-muted-color);
+      }
+    }
+  }
+
+  .restaurants-table {
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+
+    :deep(.p-datatable) {
+      .p-datatable-thead > tr > th {
+        background-color: var(--p-primary-500);
+        color: white;
+        font-weight: 600;
+        padding: 1rem 0.875rem;
+        text-align: left;
+        border: none;
+        font-size: 0.95rem;
+
+        .p-sortable-column {
+          cursor: pointer;
+        }
+
+        .p-sorticon {
+          margin-left: 0.5rem;
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+
+      .p-datatable-tbody > tr {
+        border-bottom: 1px solid var(--p-surface-border);
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: var(--p-surface-hover);
+        }
+
+        td {
+          padding: 1rem 1rem;
+          vertical-align: middle;
+          font-size: 0.95rem;
+
+          .index-cell {
+            font-weight: 600;
+            color: var(--p-primary-500);
+            width: 35px;
+          }
+
+          .name-cell {
+            font-weight: 600;
+            color: var(--p-text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .owner-cell,
+          .email-cell {
+            color: var(--p-text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .email-cell a {
+            color: var(--p-primary-500);
+            text-decoration: none;
+            white-space: nowrap;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+
+          .address-cell {
+            font-size: 0.9rem;
+            color: var(--p-text-muted-color);
+
+            .address-text {
+              display: block;
+              max-width: 150px;
+              word-break: break-word;
+              white-space: normal;
+            }
+          }
+
+          .date-cell {
+            color: var(--p-text-muted-color);
+            font-size: 0.9rem;
+            white-space: nowrap;
+          }
+
+          .action-cell {
+            .action-buttons {
+              display: flex;
+              gap: 1.25rem;
+              align-items: center;
+              justify-content: flex-start;
+              flex-wrap: wrap;
+
+              :deep(.p-toggleswitch) {
+                .p-toggleswitch-slider {
+                  width: 50px !important;
+                  height: 26px !important;
+                  background-color: var(--p-surface-border) !important;
+
+                  &::before {
+                    width: 22px !important;
+                    height: 22px !important;
+                    top: 2px !important;
+                    left: 2px !important;
+                  }
+                }
+
+                &.p-checked .p-toggleswitch-slider {
+                  background-color: var(--p-primary-500) !important;
+                }
+              }
+
+              .edit-btn,
+              .delete-btn {
+                padding: 0.6rem 1.2rem;
+                height: auto;
+                width: auto;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                border-radius: 6px;
+                transition: all 0.2s ease;
+                border: 1px solid transparent;
+                font-size: 0.9rem;
+                white-space: nowrap;
+
+                &:hover {
+                  transform: translateY(-2px);
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+                }
+              }
+
+              .edit-btn {
+                background-color: var(--p-warning-500);
+                color: white;
+
+                &:hover {
+                  background-color: var(--p-warning-600);
+                }
+
+                i {
+                  font-size: 1rem;
+                }
+              }
+
+              .delete-btn {
+                background-color: var(--p-danger-500);
+                color: white;
+
+                &:hover {
+                  background-color: var(--p-danger-600);
+                }
+
+                i {
+                  font-size: 1rem;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .p-paginator {
+        background-color: var(--p-surface-section);
+        border-top: 1px solid var(--p-surface-border);
+        padding: 1rem 0.875rem;
+        font-size: 0.9rem;
+      }
+
+      .p-empty-message td {
+        text-align: center;
+        padding: 3rem;
+
+        .empty-state {
+          .empty-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            color: var(--p-text-muted-color);
+
+            i {
+              font-size: 3rem;
+              color: var(--p-text-muted-color);
+            }
+
+            p {
+              margin: 0;
+              font-size: 1rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Edit Dialog Styling
+  :deep(.p-dialog) {
+    .p-dialog-header {
+      background-color: var(--p-primary-500);
+      color: white;
+      border: none;
+      padding: 1.25rem;
+
+      .p-dialog-title {
+        font-weight: 600;
+      }
+
+      .p-dialog-header-close {
+        color: white;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+
+    .p-dialog-content {
+      padding: 1.5rem;
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1.25rem;
+
+        label {
+          font-weight: 500;
+          color: var(--p-text-color);
+          font-size: 0.95rem;
+        }
+
+        :deep(input),
+        :deep(textarea) {
+          padding: 0.6rem 0.875rem;
+          border: 1px solid var(--p-field-border-color);
+          border-radius: 6px;
+          font-size: 0.95rem;
+          transition: all 0.2s ease;
+
+          &:focus {
+            border-color: var(--p-primary-500);
+            box-shadow: 0 0 0 0.2rem var(--p-primary-500, rgba(13, 110, 253, 0.25));
+            outline: none;
+          }
+        }
+
+        textarea {
+          resize: vertical;
+          min-height: 100px;
+        }
+
+        .error-message {
+          display: block;
+          color: var(--p-danger-500);
+          font-size: 0.85rem;
+          margin-top: 0.25rem;
+        }
+      }
+    }
+
+    .p-dialog-footer {
+      background-color: var(--p-surface-section);
+      border-top: 1px solid var(--p-surface-border);
+      padding: 1.25rem;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+
+      :deep(button) {
+        padding: 0.6rem 1.25rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        font-size: 0.95rem;
+
+        &:hover {
+          transform: translateY(-1px);
+        }
+      }
+    }
+  }
+
+  // Confirmation Dialog
+  :deep(.p-confirmdialog) {
+    .p-dialog-header {
+      background-color: var(--p-danger-500);
+    }
+  }
+
+  // Toast Notifications
+  :deep(.p-toast) {
+    .p-toast-message {
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  // Badge Styling
+  :deep(.p-badge) {
+    padding: 0.4rem 0.875rem;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 0.85rem;
+  }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .admin-restaurant-management {
+    margin: 2rem 2rem 0 2rem;
+
+    .search-section {
+      :deep(.p-iconfield) {
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-restaurant-management {
+    margin: 1.5rem 1rem 0 1rem;
+    padding: 1.5rem;
+
+    .header {
+      margin-bottom: 1rem;
+
+      h2 {
+        font-size: 1.25rem;
+
+        i {
+          font-size: 1.5rem;
+        }
+      }
+    }
+
+    .restaurants-table {
+      :deep(.p-datatable) {
+        .p-datatable-thead > tr > th {
+          padding: 0.75rem 0.5rem;
+          font-size: 0.85rem;
+        }
+
+        .p-datatable-tbody > tr {
+          td {
+            padding: 0.75rem 0.5rem;
+            font-size: 0.85rem;
+
+            .action-cell {
+              .action-buttons {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+
+                :deep(.p-toggleswitch) {
+                  .p-toggleswitch-slider {
+                    width: 40px !important;
+                    height: 22px !important;
+
+                    &::before {
+                      width: 18px !important;
+                      height: 18px !important;
+                    }
+                  }
+                }
+
+                .edit-btn,
+                .delete-btn {
+                  padding: 0.4rem 0.75rem;
+                  font-size: 0.8rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    :deep(.p-dialog) {
+      .p-dialog-content {
+        padding: 1.25rem;
+
+        .field {
+          margin-bottom: 1rem;
+        }
+      }
+
+      .p-dialog-footer {
+        padding: 1rem;
+        gap: 0.5rem;
+
+        button {
+          padding: 0.5rem 1rem;
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-restaurant-management {
+    margin: 1rem 0.5rem 0 0.5rem;
+    padding: 1rem;
+
+    .header {
+      margin-bottom: 0.75rem;
+
+      h2 {
+        font-size: 1.1rem;
+
+        i {
+          font-size: 1.25rem;
+        }
+      }
+
+      p {
+        font-size: 0.85rem;
+      }
+    }
+
+    .search-section {
+      margin-bottom: 1rem;
+
+      :deep(.p-iconfield) {
+        max-width: 100%;
+
+        input {
+          font-size: 1rem;
+        }
+      }
+    }
+
+    .restaurants-table {
+      :deep(.p-datatable) {
+        .p-datatable-thead > tr > th {
+          padding: 0.5rem;
+          font-size: 0.75rem;
+        }
+
+        .p-datatable-tbody > tr {
+          td {
+            padding: 0.5rem;
+            font-size: 0.8rem;
+
+            .action-cell {
+              .action-buttons {
+                gap: 0.25rem;
+
+                :deep(.p-toggleswitch) {
+                  .p-toggleswitch-slider {
+                    width: 35px !important;
+                    height: 20px !important;
+
+                    &::before {
+                      width: 16px !important;
+                      height: 16px !important;
+                    }
+                  }
+                }
+
+                .edit-btn,
+                .delete-btn {
+                  padding: 0.3rem 0.6rem;
+                  font-size: 0.7rem;
+                }
+              }
+            }
+          }
+        }
+
+        .p-paginator {
+          padding: 0.75rem 0.5rem;
+          font-size: 0.8rem;
+        }
+      }
+    }
+
+    :deep(.p-dialog) {
+      width: 90vw !important;
+
+      .p-dialog-header {
+        padding: 1rem;
+      }
+
+      .p-dialog-content {
+        padding: 1rem;
+
+        .field {
+          margin-bottom: 0.75rem;
+
+          label {
+            font-size: 0.9rem;
+          }
+
+          :deep(input),
+          :deep(textarea) {
+            font-size: 0.9rem;
+          }
+        }
+      }
+
+      .p-dialog-footer {
+        padding: 0.75rem;
+        flex-direction: column;
+
+        button {
+          width: 100%;
+          font-size: 0.85rem;
+        }
+      }
+    }
+  }
+
+  // Side Drawer Styling
+  :deep(.edit-drawer) {
+    .p-sidebar {
+      width: 480px !important;
+      box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15) !important;
+
+      .p-sidebar-header {
+        background-color: var(--p-primary-500);
+        color: white;
+        padding: 0 !important;
+        border: none !important;
+      }
+
+      .p-sidebar-close {
+        color: white !important;
+        opacity: 0.8;
+
+        &:hover {
+          opacity: 1;
+          background-color: rgba(255, 255, 255, 0.2) !important;
+        }
+      }
+
+      .p-sidebar-content {
+        padding: 0 !important;
+        background-color: var(--p-surface-ground);
+      }
+
+      .p-sidebar-footer {
+        background-color: var(--p-surface-section);
+        border-top: 1px solid var(--p-surface-border);
+        padding: 1.5rem !important;
+      }
+    }
+
+    .drawer-header {
+      padding: 1.5rem;
+      background-color: var(--p-primary-500);
+      color: white;
+
+      h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+
+      .drawer-subtitle {
+        margin: 0;
+        font-size: 0.9rem;
+        opacity: 0.9;
+        font-weight: 500;
+      }
+    }
+
+    .drawer-form {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        font-weight: 500;
+        color: var(--p-text-color);
+        font-size: 0.95rem;
+      }
+
+      :deep(input),
+      :deep(textarea) {
+        padding: 0.7rem 0.875rem;
+        border: 1px solid var(--p-field-border-color);
+        border-radius: 6px;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+
+        &:focus {
+          border-color: var(--p-primary-500);
+          box-shadow: 0 0 0 0.2rem var(--p-primary-500, rgba(13, 110, 253, 0.25));
+          outline: none;
+        }
+      }
+
+      :deep(textarea) {
+        resize: vertical;
+        min-height: 120px;
+        font-family: inherit;
+      }
+
+      .error-message {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--p-danger-500);
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+
+        i {
+          font-size: 0.8rem;
+        }
+      }
+    }
+
+    .drawer-footer {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+
+      :deep(button) {
+        padding: 0.7rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        cursor: pointer;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none;
+        }
+      }
+    }
+  }
+}
+
+// Media Queries
+@media (max-width: 1440px) {
+  .admin-restaurant-management {
+    margin: 2rem 3rem 0 3rem;
+
+    :deep(.edit-drawer .p-sidebar) {
+      width: 420px !important;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .admin-restaurant-management {
+    margin: 1.5rem 2rem 0 2rem;
+
+    :deep(.edit-drawer .p-sidebar) {
+      width: 380px !important;
+    }
+  }
+}

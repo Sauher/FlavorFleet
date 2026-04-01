@@ -5,6 +5,7 @@ const cors = require('cors')
 
 const userRoutes =  require('../routes/users.routes')
 const restaurantRoutes = require('../routes/restaurant.routes')
+const adminRestaurantRoutes = require('../routes/admin-restaurant.routes')
 const mailRoutes = require('../routes/mail.routes')
 const menuItemRoutes= require('../routes/menu-item.routes')
 const addressRoutes = require('../routes/address.routes')
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 
 // routes
 app.use('/restaurants', restaurantRoutes)
+app.use('/admin/restaurants', adminRestaurantRoutes)
 app.use('/users', userRoutes)
 app.use('/mail', mailRoutes)
 app.use('/menuitems', menuItemRoutes)

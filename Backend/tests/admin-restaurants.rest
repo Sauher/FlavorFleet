@@ -1,0 +1,185 @@
+### Admin Restaurant Management API Tests
+### Use with REST Client extension or Postman
+
+@baseUrl = http://localhost:3000
+@adminToken = Bearer YOUR_JWT_TOKEN_HERE
+
+###
+### 1. GET ALL RESTAURANTS (for admin)
+### Returns all restaurants with owner details
+GET {{baseUrl}}/admin/restaurants
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+###
+### 2. GET SPECIFIC RESTAURANT (for admin)
+### Replace RESTAURANT_ID with actual restaurant UUID
+GET {{baseUrl}}/admin/restaurants/RESTAURANT_ID
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+###
+### 3. TOGGLE RESTAURANT STATUS
+### Toggles is_active field (true -> false or false -> true)
+### Replace RESTAURANT_ID with actual restaurant UUID
+PATCH {{baseUrl}}/admin/restaurants/RESTAURANT_ID/toggle-status
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+###
+### 4. UPDATE RESTAURANT (PUT - Full Update)
+### Update one or multiple fields
+### Replace RESTAURANT_ID with actual restaurant UUID
+PUT {{baseUrl}}/admin/restaurants/RESTAURANT_ID
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Updated Restaurant Name",
+  "description": "Updated description of the restaurant",
+  "address": "123 New Street, Budapest, Hungary",
+  "phone": "+36 1 234 5678",
+  "image_url": "https://example.com/restaurant-image.jpg",
+  "is_active": true
+}
+
+###
+### 5. UPDATE RESTAURANT - NAME ONLY
+### Example: Update only the name
+PUT {{baseUrl}}/admin/restaurants/RESTAURANT_ID
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "New Restaurant Name Only"
+}
+
+###
+### 6. UPDATE RESTAURANT - ADDRESS AND PHONE
+### Example: Update address and phone
+PUT {{baseUrl}}/admin/restaurants/RESTAURANT_ID
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+  "address": "456 Another Avenue, Budapest",
+  "phone": "+36 1 987 6543"
+}
+
+###
+### 7. UPDATE RESTAURANT - DESCRIPTION
+### Example: Update detailed description
+PUT {{baseUrl}}/admin/restaurants/RESTAURANT_ID
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+  "description": "This is our newly updated restaurant description with more details about our cuisine, atmosphere, and service quality."
+}
+
+###
+### 8. DEACTIVATE RESTAURANT
+### Set is_active to false
+PUT {{baseUrl}}/admin/restaurants/RESTAURANT_ID
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+  "is_active": false
+}
+
+###
+### 9. ACTIVATE RESTAURANT
+### Set is_active to true
+PUT {{baseUrl}}/admin/restaurants/RESTAURANT_ID
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+  "is_active": true
+}
+
+###
+### 10. DELETE RESTAURANT (Soft Delete)
+### Sets is_active to false (soft delete)
+DELETE {{baseUrl}}/admin/restaurants/RESTAURANT_ID
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+###
+### 11. TEST: Admin Authorization - Missing Token
+### Should return 401 error
+GET {{baseUrl}}/admin/restaurants
+Content-Type: application/json
+
+###
+### 12. TEST: Non-Admin Access (if you have a regular user token)
+### Should return 403 "Access denied"
+GET {{baseUrl}}/admin/restaurants
+Authorization: Bearer REGULAR_USER_TOKEN
+Content-Type: application/json
+
+###
+### EXAMPLE RESPONSES
+###
+
+###
+### Success Response - GET /admin/restaurants
+### 200 OK
+### {
+###   "success": true,
+###   "data": [
+###     {
+###       "id": "550e8400-e29b-41d4-a716-446655440000",
+###       "name": "Restaurant Name",
+###       "description": "Restaurant description",
+###       "address": "123 Main Street",
+###       "phone": "+36 1 123 4567",
+###       "image_url": "https://example.com/image.jpg",
+###       "is_active": true,
+###       "is_open": false,
+###       "opening_hours": [
+###         {"day": 0, "opening_time": "09:00", "closing_time": "22:00"},
+###         ...
+###       ],
+###       "images": ["https://example.com/img1.jpg"],
+###       "createdAt": "2026-04-01T10:00:00.000Z",
+###       "updatedAt": "2026-04-01T10:00:00.000Z",
+###       "owner": {
+###         "id": "550e8400-e29b-41d4-a716-446655440001",
+###         "name": "Owner Name",
+###         "email": "owner@example.com",
+###         "status": true
+###       }
+###     }
+###   ],
+###   "count": 1
+### }
+###
+
+###
+### Error Response - Unauthorized
+### 401 Unauthorized
+### {
+###   "message": "No token provided"
+### }
+###
+
+###
+### Error Response - Forbidden (Not Admin)
+### 403 Forbidden
+### {
+###   "message": "Access denied. Admin role required.",
+###   "requiredRole": "admin",
+###   "currentRole": "user"
+### }
+###
+
+###
+### Error Response - Not Found
+### 404 Not Found
+### {
+###   "success": false,
+###   "message": "Restaurant not found"
+### }
+###

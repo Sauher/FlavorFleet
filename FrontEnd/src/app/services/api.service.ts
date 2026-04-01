@@ -99,6 +99,10 @@ export class ApiService {
     return this.http.patch(`${this.server}/${table}/${id}`, data, this.tokenHeader());
   }
 
+  put(table: string, id: string, data: object) {
+    return this.http.put(`${this.server}/${table}/${id}`, data, this.tokenHeader());
+  }
+
   delete(table: string, id: string) {
     return this.http.delete(`${this.server}/${table}/${id}`, this.tokenHeader());
   }

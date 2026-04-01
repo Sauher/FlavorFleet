@@ -1,0 +1,271 @@
+<div class="admin-restaurant-management">
+  <!-- Header Section -->
+  <div class="header">
+    <h2>
+      <i class="pi pi-building"></i> Étterem Kezelés (Admin)
+      <p-badge [value]="filteredRestaurants.length" severity="info"></p-badge>
+    </h2>
+    <p>Az összes étterem kezelése és adminisztrációja</p>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-section">
+    <p-iconField iconPosition="left">
+      <i class="pi pi-search"></i>
+      <input
+        pInputText
+        type="text"
+        [(ngModel)]="searchValue"
+        (ngModelChange)="onSearchChange()"
+        placeholder="Keresés étterem vagy tulajdonos neve szerint..."
+      />
+    </p-iconField>
+  </div>
+
+  <!-- Restaurants Table -->
+  <div class="restaurants-table">
+    <p-table
+      [value]="filteredRestaurants"
+      [loading]="loading"
+      [paginator]="true"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Megjelenítve: {first} - {last} / {totalRecords} étterem"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      responsiveLayout="scroll"
+    >
+      <!-- Index Column -->
+      <ng-template #header>
+        <tr>
+          <th style="width: 4%" pSortableColumn="#">
+            # <p-sortIcon field="id"></p-sortIcon>
+          </th>
+          <th style="width: 14%" pSortableColumn="name">
+            Étterem neve <p-sortIcon field="name"></p-sortIcon>
+          </th>
+          <th style="width: 12%" pSortableColumn="owner.name">
+            Tulajdonos <p-sortIcon field="owner.name"></p-sortIcon>
+          </th>
+          <th style="width: 14%">E-mail</th>
+          <th style="width: 13%">Cím</th>
+          <th style="width: 8%">Státusz</th>
+          <th style="width: 10%">Létrehozva</th>
+          <th style="width: 25%">Műveletek</th>
+        </tr>
+      </ng-template>
+
+      <!-- Table Body -->
+      <ng-template #body let-restaurant let-rowIndex="rowIndex">
+        <tr>
+          <!-- Index -->
+          <td class="index-cell">{{ rowIndex + 1 }}</td>
+
+          <!-- Restaurant Name -->
+          <td class="name-cell">{{ restaurant.name }}</td>
+
+          <!-- Owner Name -->
+          <td class="owner-cell">{{ getOwnerName(restaurant) }}</td>
+
+          <!-- Owner Email -->
+          <td class="email-cell">
+            <a href="mailto:{{ getOwnerEmail(restaurant) }}">{{
+              getOwnerEmail(restaurant)
+            }}</a>
+          </td>
+
+          <!-- Address -->
+          <td class="address-cell">
+            <span class="address-text">{{ restaurant.address }}</span>
+          </td>
+
+          <!-- Status -->
+          <td>
+            <p-badge
+              [value]="getStatusLabel(restaurant.is_active)"
+              [severity]="getStatusColor(restaurant.is_active)"
+            ></p-badge>
+          </td>
+
+          <!-- Created Date -->
+          <td class="date-cell">{{ formatDate(restaurant.createdAt) }}</td>
+
+          <!-- Actions -->
+          <td class="action-cell">
+            <div class="action-buttons">
+              <p-toggleSwitch
+                [(ngModel)]="restaurant.is_active"
+                (onChange)="toggleRestaurantStatus(restaurant)"
+              ></p-toggleSwitch>
+              <button
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-pen-to-square"
+                class="edit-btn"
+                (click)="openEditDialog(restaurant)"
+                pTooltip="Szerkesztés"
+                tooltipPosition="top"
+              ></button>
+              <button
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-trash"
+                class="delete-btn"
+                (click)="confirmDelete(restaurant)"
+                pTooltip="Törlés"
+                tooltipPosition="top"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <!-- Empty State -->
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="8" class="text-center py-4">
+            <div class="empty-state">
+              <div class="empty-content">
+                <i class="pi pi-inbox"></i>
+                <p>Nincsenek éttermek</p>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Edit Side Drawer -->
+  <p-sidebar
+    [(visible)]="editDialogVisible"
+    [position]="'right'"
+    [fullScreen]="false"
+    [showCloseIcon]="true"
+    [modal]="true"
+    [blockScroll]="true"
+    styleClass="edit-drawer"
+  >
+    <ng-template pTemplate="header">
+      <div class="drawer-header">
+        <h3>Étterem szerkesztése</h3>
+        <p class="drawer-subtitle">{{ selectedRestaurant?.name }}</p>
+      </div>
+    </ng-template>
+
+    <form [formGroup]="editForm" class="drawer-form">
+      <!-- Restaurant Name -->
+      <div class="form-field">
+        <label for="name">Étterem neve *</label>
+        <input
+          id="name"
+          pInputText
+          type="text"
+          formControlName="name"
+          placeholder="Étterem neve"
+          class="w-full"
+        />
+        <small
+          class="error-message"
+          *ngIf="
+            editForm.get('name')?.invalid && editForm.get('name')?.touched
+          "
+        >
+          <i class="pi pi-exclamation-circle"></i>
+          Az étterem nevének legalább 3 karakter hosszúnak kell lennie
+        </small>
+      </div>
+
+      <!-- Address -->
+      <div class="form-field">
+        <label for="address">Cím *</label>
+        <input
+          id="address"
+          pInputText
+          type="text"
+          formControlName="address"
+          placeholder="Étterem címe"
+          class="w-full"
+        />
+        <small
+          class="error-message"
+          *ngIf="
+            editForm.get('address')?.invalid &&
+            editForm.get('address')?.touched
+          "
+        >
+          <i class="pi pi-exclamation-circle"></i>
+          A cím megadása kötelező
+        </small>
+      </div>
+
+      <!-- Phone -->
+      <div class="form-field">
+        <label for="phone">Telefonszám</label>
+        <input
+          id="phone"
+          pInputText
+          type="tel"
+          formControlName="phone"
+          placeholder="+36 1 234 5678"
+          class="w-full"
+        />
+      </div>
+
+      <!-- Image URL -->
+      <div class="form-field">
+        <label for="image_url">Kép URL</label>
+        <input
+          id="image_url"
+          pInputText
+          type="url"
+          formControlName="image_url"
+          placeholder="https://..."
+          class="w-full"
+        />
+      </div>
+
+      <!-- Description -->
+      <div class="form-field">
+        <label for="description">Leírás</label>
+        <textarea
+          id="description"
+          pInputTextarea
+          formControlName="description"
+          placeholder="Az étterem leírása"
+          [rows]="5"
+          class="w-full"
+        ></textarea>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <div class="drawer-footer">
+        <button
+          pButton
+          type="button"
+          label="Mégse"
+          icon="pi pi-times"
+          (click)="editDialogVisible = false"
+          class="p-button-secondary"
+        ></button>
+        <button
+          pButton
+          type="button"
+          label="Mentés"
+          icon="pi pi-check"
+          (click)="saveRestaurant()"
+          [disabled]="!editForm.valid"
+          class="p-button-primary"
+        ></button>
+      </div>
+    </ng-template>
+  </p-sidebar>
+
+  <!-- Confirmation Dialog -->
+  <p-confirmDialog></p-confirmDialog>
+
+  <!-- Toast Messages -->
+  <p-toast></p-toast>
+</div>

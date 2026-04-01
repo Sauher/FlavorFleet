@@ -9,6 +9,7 @@ import { MenuManagementComponent } from './components/owner/menu-management/menu
 import { OrderManagementComponent } from './components/owner/order-management/order-management.component';
 import { RestaurantManagementComponent } from './components/owner/restaurant-management/restaurant-management.component';
 import { UserControlComponent } from './components/admin/user-control/user-control.component';
+import { AdminRestaurantManagementComponent } from './components/admin/admin-restaurant-management/admin-restaurant-management.component';
 import { adminGuard } from './guards/admin.guard';
 import { ownerGuard } from './guards/owner.guard';
 import { authGuard } from './guards/auth.guard';
@@ -32,6 +33,7 @@ export const routes: Routes = [
   //Admin routes
 
   {path: "user-control", component: UserControlComponent, canActivate: [adminGuard]},
+  {path: "admin-restaurants", component: AdminRestaurantManagementComponent, canActivate: [adminGuard]},
 
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
