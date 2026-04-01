@@ -12,6 +12,7 @@ export interface Restaurant {
   address: string;
   image_url?: string | null;
   phone: string | null;
+  types: string[];
   is_active: boolean;
   is_open: boolean;
   opening_hours: OpeningHoursEntry[];

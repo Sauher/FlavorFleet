@@ -39,19 +39,19 @@
         <p-card styleClass="rest-card">
           <ng-template pTemplate="header">
             <div class="rest-img">
-              <img [src]="r.imageUrl" [alt]="r.name" />
+              <img [src]="r.image_url" [alt]="r.name" />
             </div>
           </ng-template>
 
           <div class="rest-body">
             <div class="rest-name">{{ r.name }}</div>
-            <div class="rest-desc">{{ r.desc }}</div>
+            <div class="rest-desc">{{ r.description }}</div>
 
             <div class="rest-tags">
               <p-tag
                 *ngFor="let t of r.types"
                 [value]="t"
-                [severity]="typeSeverity(t)"
+                [severity]="typeSeverity($any(t))"
               ></p-tag>
             </div>
 

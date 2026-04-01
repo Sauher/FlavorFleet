@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -9,16 +8,10 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { TagModule } from 'primeng/tag';
 import { DividerModule } from 'primeng/divider';
 import { ApiService } from '../../../../services/api.service';
+import { Restaurant } from '../../../../interfaces/restaurant';
 
 type FoodType = 'Pizza' | 'Burger' | 'Sushi' | 'Saláta' | 'Desszert' | 'Mexikói';
 
-interface Restaurant {
-  id: number;
-  name: string;
-  desc: string;
-  types: FoodType[];
-  imageUrl: string;
-}
 
 @Component({
   selector: 'app-restaurants-page',
