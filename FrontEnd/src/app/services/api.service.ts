@@ -84,17 +84,6 @@ export class ApiService {
     return this.http.post(`${this.server}/${table}`, data);
   }
 
-  uploadRestaurantImages(restaurantId: string, files: File[]) {
-    const formData = new FormData();
-    files.forEach((file) => formData.append('images', file));
-
-    return this.http.post(
-      `${this.server}/restaurants/${restaurantId}/images`,
-      formData,
-      this.tokenHeader()
-    );
-  }
-
   update(table: string, id: string, data: object) {
     return this.http.patch(`${this.server}/${table}/${id}`, data, this.tokenHeader());
   }

@@ -8,8 +8,9 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { DividerModule } from 'primeng/divider';
-import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextarea } from 'primeng/inputtextarea';
+import { UploaderModule } from 'angular-uploader';
+import { Uploader, UploadWidgetConfig, UploadWidgetResult } from 'uploader';
 import { environment } from '../../../../environments/environment';
 
 import { ApiService } from '../../../services/api.service';
@@ -34,7 +35,7 @@ interface EditorDayHours {
     InputTextModule,
     ToggleButtonModule,
     DividerModule,
-    FileUploadModule,
+    UploaderModule,
     InputTextarea
   ],
   templateUrl: './restaurant-management.component.html',
@@ -205,9 +206,14 @@ export class RestaurantManagementComponent implements OnInit {
       });
   }
 
-  async onPickRestaurantImage(event: { files?: File[] }): Promise<void> {
-    const files = event.files ?? [];
+  // ── Uploader (angular-uploader) setup ──
+  uploader = Uploader({ apiKey: 'free' });
 
+  uploaderOptions: UploadWidgetConfig = {
+    multi: true,
+  };
+
+  onUploadComplete = (files: UploadWidgetResult[]) => {
     if (!this.editorModel.id) {
       this.message.show('warn', 'Előbb mentsd', 'Először hozd létre az éttermet, utána tudsz képet feltölteni.');
       return;
@@ -218,10 +224,11 @@ export class RestaurantManagementComponent implements OnInit {
         this.message.show('warn', 'Maximum 2 kép', 'Egyszerre legfeljebb 2 képet tárolhatsz.');
         break;
       }
-
-      await this.uploadRestaurantImage(file);
+      if (file.fileUrl) {
+        this.editorModel.images.push(file.fileUrl);
+      }
     }
-  }
+  };
 
   removeRestaurantImage(index: number): void {
     this.editorModel.images = this.editorModel.images.filter((_, imageIndex) => imageIndex !== index);
@@ -313,23 +320,6 @@ export class RestaurantManagementComponent implements OnInit {
         opening_time: current?.opening_time ?? '',
         closing_time: current?.closing_time ?? ''
       };
-    });
-  }
-
-  private uploadRestaurantImage(file: File): Promise<void> {
-    return new Promise((resolve) => {
-      this.api.uploadRestaurantImages(this.editorModel.id, [file]).subscribe({
-        next: (response: any) => {
-          const normalized = this.normalizeImagesField(response?.images).slice(0, 2);
-          this.editorModel.images = normalized;
-          resolve();
-        },
-        error: (error) => {
-          const errorMessage = this.resolveRestaurantError(error, 'Nem sikerült feltölteni a képet.');
-          this.message.show('error', 'Hiba', errorMessage);
-          resolve();
-        }
-      });
     });
   }
 
