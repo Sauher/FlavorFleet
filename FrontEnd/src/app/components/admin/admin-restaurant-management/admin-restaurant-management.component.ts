@@ -7,16 +7,9 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextarea } from 'primeng/inputtextarea';
 import { DialogModule } from 'primeng/dialog';
-import { SidebarModule } from 'primeng/sidebar';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { InputGroupModule } from 'primeng/inputgroup';
-import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { CardModule } from 'primeng/card';
-import { DividerModule } from 'primeng/divider';
 import { BadgeModule } from 'primeng/badge';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
@@ -45,18 +38,11 @@ interface RestaurantWithOwner extends Restaurant {
     TableModule,
     ButtonModule,
     InputTextModule,
-    SidebarModule,
     DialogModule,
     InputTextarea,
     ToastModule,
     ConfirmDialogModule,
-    InputGroupModule,
-    InputGroupAddonModule,
-    IconFieldModule,
-    InputIconModule,
     ToggleSwitchModule,
-    CardModule,
-    DividerModule,
     BadgeModule
   ],
   providers: [ConfirmationService, MessageService],
@@ -90,7 +76,6 @@ export class AdminRestaurantManagementComponent implements OnInit {
     private customMessageService: CustomMessageService,
     private confirmationService: ConfirmationService,
     private formBuilder: FormBuilder,
-    private authService: AuthService
   ) {
     this.editForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -187,7 +172,6 @@ export class AdminRestaurantManagementComponent implements OnInit {
       description: restaurant.description || '',
       address: restaurant.address,
       phone: restaurant.phone || '',
-      image_url: restaurant.image_url || ''
     });
     this.editDialogVisible = true;
   }
@@ -208,7 +192,6 @@ export class AdminRestaurantManagementComponent implements OnInit {
       description: formValue.description.trim(),
       address: formValue.address.trim(),
       phone: formValue.phone.trim(),
-      image_url: formValue.image_url.trim()
     };
 
     this.api
